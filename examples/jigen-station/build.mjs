@@ -1,0 +1,24 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import crypto from 'node:crypto';
+import {createRequire} from 'node:module';
+import {rolldown} from 'rolldown';
+const require=createRequire(import.meta.url);
+const {transform}=require('lightningcss');
+const root=path.dirname(fileURLToPath(import.meta.url)),src=path.join(root,'source'),out=path.join(root,'site');
+const hash=buf=>crypto.createHash('sha256').update(buf).digest('hex').slice(0,10);
+await fs.rm(out,{recursive:true,force:true});await fs.mkdir(path.join(out,'assets'),{recursive:true});
+let html=await fs.readFile(path.join(src,'index.html'),'utf8');
+html=html.replace('type="module"','defer');
+const cssInput=await fs.readFile(path.join(src,'style.css'));
+const css=transform({filename:'style.css',code:cssInput,minify:true}).code;
+const bundle=await rolldown({input:path.join(src,'app.js')});
+const built=await bundle.generate({format:'iife',minify:true});const js=Buffer.from(built.output[0].code);await bundle.close();
+const mapping={};
+for(const name of await fs.readdir(path.join(src,'assets'))){if(!html.includes('assets/'+name))continue;const data=await fs.readFile(path.join(src,'assets',name));const ext=path.extname(name);const file=`assets/${path.basename(name,ext)}.${hash(data)}${ext}`;await fs.writeFile(path.join(out,file),data);mapping[`assets/${name}`]=file;}
+for(const [name,data] of [['style.css',css],['app.js',js]]){const ext=path.extname(name);const file=`assets/${path.basename(name,ext)}.${hash(data)}${ext}`;await fs.writeFile(path.join(out,file),data);mapping[name]=file;}
+for(const [from,to] of Object.entries(mapping))html=html.split(from).join(to);
+await fs.writeFile(path.join(out,'index.html'),html);
+await fs.writeFile(path.join(out,'_headers'),'/*\n  Cache-Control: no-cache\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n/assets/*\n  Cache-Control: public, max-age=31536000, immutable\n');
+console.log(JSON.stringify({css:css.length,js:js.length,assets:Object.keys(mapping).length}));

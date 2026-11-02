@@ -1,0 +1,6 @@
+interface:
+  display_name: "Sitecraft · 官网设计"
+  short_description: "一句话生成精美静态官网 HTML，完成构图、动效、视觉检查与轻量交付"
+  default_prompt: "使用 $sitecraft 处理当前官网相关任务；新建网站时根据一句话业务描述自主完成设计、实现与验证，直接交付完整可运行的静态 HTML 成品；局部修改或讨论按实际范围执行。"
+policy:
+  allow_implicit_invocation: true

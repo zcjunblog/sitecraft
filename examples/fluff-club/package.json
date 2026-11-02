@@ -1,0 +1,12 @@
+{
+  "name": "fluff-club-sitecraft-example",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "preview": "python3 -m http.server 8000 --bind 127.0.0.1 --directory site"
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  }
+}

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#2e4ed8">
+  <title>蓬蓬俱乐部 FLUFF CLUB · 把毛茸茸，交给温柔</title>
+  <meta name="description" content="蓬蓬俱乐部，宠物洗护与美容门店概念官网。给每一只毛孩子，刚刚好的照顾。">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+<svg class="svg-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+  <symbol id="dog-mark" viewBox="0 0 60 60"><path d="M20 20c-8-6-14-2-13 9 0 7 5 12 10 10m23-19c8-6 14-2 13 9 0 7-5 12-10 10M18 23c3-9 21-9 24 0l3 15c0 11-30 11-30 0Z"/><path d="M23 30v3m14-3v3m-10 4h6l-3 3Zm3 3v4m-5-1c2 3 8 3 10 0"/></symbol>
+  <symbol id="arrow" viewBox="0 0 24 24"><path d="M5 19 19 5M5 5h14v14"/></symbol>
+  <symbol id="bubble" viewBox="0 0 44 44"><circle cx="17" cy="26" r="11"/><circle cx="31" cy="12" r="6"/><circle cx="11" cy="8" r="3"/><path d="M12 23c0-3 2-5 5-5m14 10v8m-4-4h8"/></symbol>
+  <symbol id="scissors" viewBox="0 0 44 44"><circle cx="12" cy="31" r="6"/><circle cx="31" cy="31" r="6"/><path d="m15 26 17-21M28 26 12 5m7 14 5 6"/></symbol>
+  <symbol id="comb" viewBox="0 0 44 44"><path d="M7 11h30v9H7zM10 20v13m6-13v13m6-13v13m6-13v13m6-13v13M11 7h22"/></symbol>
+  <symbol id="spark" viewBox="0 0 24 24"><path d="m12 2 2.5 7.5L22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5Z"/></symbol>
+</defs></svg>
+<a href="#main" class="skip-link">跳到主要内容</a>
+<header class="site-header">
+  <div class="header-inner shell">
+    <a href="#top" class="brand" aria-label="蓬蓬俱乐部首页"><svg><use href="#dog-mark"/></svg><span class="brand-type"><strong>蓬蓬俱乐部</strong><span>FLUFF CLUB</span></span></a>
+    <nav id="main-nav" aria-label="主导航"><a href="#services">洗护与美容</a><a href="#space">关于蓬蓬</a><a href="#questions">来店之前</a></nav>
+    <button class="button button-blue header-book" data-book>预约一份蓬松 <svg><use href="#arrow"/></svg></button>
+    <button class="menu-toggle" aria-label="打开导航" aria-controls="main-nav" aria-expanded="false"><span></span><span></span></button>
+  </div>
+</header>
+<main id="main">
+  <section class="hero shell" id="top" aria-labelledby="hero-title">
+    <div class="hero-copy">
+      <p class="eyebrow light"><span class="small-dot"></span> GOOD CARE. HAPPY TAILS.</p>
+      <h1 id="hero-title">把毛茸茸，<br>交给<span class="word-underline">温柔<svg viewBox="0 0 170 16" aria-hidden="true"><path d="M2 10Q80 0 167 9M13 15Q82 6 154 14"/></svg></span>。</h1>
+      <p class="hero-description">洗去一身小淘气，<br>带着香香软软的好心情回家。</p>
+      <button class="button button-yellow hero-book" data-book>给它安排一下 <svg><use href="#arrow"/></svg></button>
+      <div class="hero-note"><span class="tiny-paw">＋</span> 洗护 · 美容 · 一点点小宠爱</div>
+    </div>
+    <div class="hero-visual"><img src="assets/hero.jpg" alt="坐在浅黄色浴盆里、头顶小泡泡的杏色卷毛小狗" width="1536" height="1024" fetchpriority="high"><div class="photo-sticker"><svg><use href="#spark"/></svg><span>今日份蓬松<br><b>已就位！</b></span></div><span class="image-caption">A LITTLE SPA, A LOT OF LOVE.</span></div>
+    <span class="hero-corner" aria-hidden="true">hello,<br>fluffy friend!</span>
+  </section>
+
+  <div class="care-strip shell" aria-label="我们的照顾方式"><div><span class="strip-number">01</span>先熟悉，再开始</div><svg><use href="#spark"/></svg><div><span class="strip-number">02</span>照顾它的小情绪</div><svg><use href="#spark"/></svg><div><span class="strip-number">03</span>每一步，清楚沟通</div></div>
+
+  <section class="services shell section-space" id="services" aria-labelledby="services-title">
+    <div class="section-top"><div><p class="eyebrow">THE GROOMING MENU</p><h2 id="services-title">今天，想怎么变可爱？</h2></div><div class="pet-tabs" role="tablist" aria-label="选择宠物类型"><button id="dog-tab" role="tab" aria-selected="true" aria-controls="service-list" tabindex="0" data-pet="dog">狗狗洗美</button><button id="cat-tab" role="tab" aria-selected="false" aria-controls="service-list" tabindex="-1" data-pet="cat">猫咪护理</button></div></div>
+    <div id="service-list" class="service-list" role="tabpanel" aria-labelledby="dog-tab" tabindex="0">
+      <article class="service-row"><span class="service-index">01</span><div class="service-icon"><svg><use href="#bubble"/></svg></div><div class="service-info"><h3>洗个香香澡</h3><p>温和清洁、细致吹干，再梳一个蓬松好心情。</p></div><span class="service-time">约 60–90 分钟</span><div class="service-price"><span>¥</span><strong>89</strong><small>起</small></div><button class="circle-button" data-book data-service="洗个香香澡" aria-label="预约洗个香香澡"><svg><use href="#arrow"/></svg></button></article>
+      <article class="service-row"><span class="service-index">02</span><div class="service-icon"><svg><use href="#scissors"/></svg></div><div class="service-info"><h3>换个可爱造型</h3><p>从脸颊到小爪子，修出适合它的精神模样。</p></div><span class="service-time">约 120–180 分钟</span><div class="service-price"><span>¥</span><strong>169</strong><small>起</small></div><button class="circle-button" data-book data-service="换个可爱造型" aria-label="预约换个可爱造型"><svg><use href="#arrow"/></svg></button></article>
+      <article class="service-row"><span class="service-index">03</span><div class="service-icon"><svg><use href="#comb"/></svg></div><div class="service-info"><h3>毛茸茸养护课</h3><p>细心梳理与去浮毛，让每一次摸摸都更舒服。</p></div><span class="service-time">约 90–120 分钟</span><div class="service-price"><span>¥</span><strong>129</strong><small>起</small></div><button class="circle-button" data-book data-service="毛茸茸养护课" aria-label="预约毛茸茸养护课"><svg><use href="#arrow"/></svg></button></article>
+    </div>
+    <p class="price-note">示例参考价 · 实际服务需根据体型、毛量与毛发状态沟通确认。</p>
+  </section>
+
+  <section class="space-section" id="space" aria-labelledby="space-title"><div class="space-grid shell">
+    <figure class="space-photo"><img src="assets/salon.jpg" alt="奶油白墙面、钴蓝接待台与自然日光组成的宠物洗护门店概念空间" width="1536" height="1024" loading="lazy"><figcaption><span>OUR LITTLE HAPPY PLACE</span><span>一间想让它放松下来的小店。</span></figcaption><span class="space-badge" aria-hidden="true"><svg><use href="#dog-mark"/></svg><span>STAY FLUFFY</span></span></figure>
+    <div class="space-copy"><p class="eyebrow">MORE THAN A BATH</p><h2 id="space-title">洗得干净，<br>也要待得安心。</h2><p class="space-intro">有的毛孩子活泼，有的慢热。<br>在蓬蓬，我们愿意多给它一点时间。</p><ol class="care-steps"><li><span>01</span><div><h3>先认识，再亲近</h3><p>闻闻新环境，打个招呼，不急着开始。</p></div></li><li><span>02</span><div><h3>洗护之前，一起确认</h3><p>聊聊习惯与偏好，确认服务和造型需求。</p></div></li><li><span>03</span><div><h3>舒服，比赶时间重要</h3><p>留意它的反应，遇到不适先暂停、再沟通。</p></div></li></ol></div>
+  </div></section>
+
+  <section class="questions shell section-space" id="questions" aria-labelledby="questions-title"><div class="faq-heading"><p class="eyebrow">BEFORE WE SAY HELLO</p><h2 id="questions-title">来店之前，<br>你可能想知道。</h2><span class="hand-drawn" aria-hidden="true">we've got you.</span></div><div class="faq-list"><details><summary>第一次来，需要提前预约吗？<span class="faq-plus"></span></summary><p>建议先预约，给它留出完整、从容的洗护时间。预约时可以一起说明宠物类型、体型和想做的服务。</p></details><details><summary>我可以选择喜欢的造型吗？<span class="faq-plus"></span></summary><p>可以准备喜欢的参考照片，再根据毛发长度、状态和日常打理习惯，一起确认适合它的造型。</p></details><details><summary>如果它比较胆小怎么办？<span class="faq-plus"></span></summary><p>请在预约时告诉我们它的性格和需要注意的习惯。我们会先让它熟悉环境，服务过程中也会根据它的状态沟通调整。</p></details></div></section>
+
+  <section class="booking-banner shell" aria-labelledby="booking-title"><div><p class="eyebrow light">A FRESH START FOR YOUR LITTLE FRIEND</p><h2 id="booking-title">下一次摸摸，<br>是更蓬松的心动。</h2></div><div class="booking-banner-action"><div class="banner-spark" aria-hidden="true"><svg><use href="#spark"/></svg></div><button class="button button-yellow" data-book>安排一次小放松 <svg><use href="#arrow"/></svg></button><p>给它一点照顾，也给你一点期待。</p></div></section>
+</main>
+<footer class="site-footer shell"><div class="footer-main"><a href="#top" class="brand"><svg><use href="#dog-mark"/></svg><span class="brand-type"><strong>蓬蓬俱乐部</strong><span>FLUFF CLUB</span></span></a><p>给每一只毛孩子，<br>刚刚好的照顾。</p><a href="#top" class="back-top">回到顶部 <svg><use href="#arrow"/></svg></a></div><div class="footer-bottom"><span>© 2026 FLUFF CLUB · 宠物洗护与美容</span><span>概念官网示例 · 品牌、服务及价格为演示内容，图片由 AI 生成</span></div></footer>
+
+<dialog id="booking-dialog" aria-labelledby="dialog-title"><div class="dialog-head"><span class="eyebrow">LET'S GET FLUFFY</span><button class="close-dialog" aria-label="关闭预约窗口">×</button></div><div id="booking-content"><h2 id="dialog-title">给它留一份小宠爱。</h2><p class="dialog-description">选好想做的照顾，体验一次预约流程。</p><form id="booking-form"><fieldset><legend>今天带谁来？</legend><div class="form-pet"><label><input type="radio" name="pet" value="dog" checked><span>狗狗</span></label><label><input type="radio" name="pet" value="cat"><span>猫咪</span></label></div></fieldset><label class="form-label" for="booking-service">想做的服务</label><select id="booking-service" name="service"><option>洗个香香澡</option><option>换个可爱造型</option><option>毛茸茸养护课</option></select><fieldset class="time-fieldset"><legend>偏好的到店时间</legend><div class="slot-options"><label><input type="radio" name="time" value="上午 10:00–12:00" checked><span>上午<span>10:00–12:00</span></span></label><label><input type="radio" name="time" value="下午 14:00–17:00"><span>下午<span>14:00–17:00</span></span></label></div></fieldset><button class="button button-blue form-submit" type="submit">预览我的预约 <svg><use href="#arrow"/></svg></button><p class="demo-notice">这是设计演示，不会提交订单或占用真实名额。</p></form></div><div id="booking-result" hidden><div class="result-mark"><svg><use href="#spark"/></svg></div><h2>一份蓬松计划，<br>安排好了。</h2><p id="result-summary"></p><p class="demo-notice">以上仅为预约效果预览，未生成真实预约。</p><button class="button button-blue result-close">好的，期待见面</button></div></dialog>
+</body>
+</html>

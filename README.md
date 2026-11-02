@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/images/sitecraft-banner.svg" alt="Sitecraft — 一句需求，交付完整静态官网" width="100%">
+  <img src="docs/images/sitecraft-banner.svg" alt="Sitecraft — 不懂技术，也能把品牌官网做得漂亮" width="100%">
 </p>
 <p align="center">
   <a href="https://github.com/zcjunblog/sitecraft/releases/latest"><img alt="Release" src="https://img.shields.io/github/v/release/zcjunblog/sitecraft?style=flat-square&color=6d55e8"></a>
@@ -7,31 +7,51 @@
   <img alt="HTML CSS JavaScript" src="https://img.shields.io/badge/HTML_%C2%B7_CSS_%C2%B7_JS-Static-20202a?style=flat-square">
   <a href="LICENSE"><img alt="Code license: MIT" src="https://img.shields.io/badge/Code-MIT-20202a?style=flat-square"></a>
 </p>
-<p align="center">面向静态官网的设计与交付 Skill。<br>从真实视觉参考出发，把构图、素材、动效、交互和轻量部署一起做好。</p>
+<h1 align="center">不懂技术，也能把品牌官网做得漂亮。</h1>
+<p align="center">用几句日常的话说出你的想法。<br>让 AI 帮你完成有品牌感的画面、顺手的交互和手机布局。</p>
 <p align="center">
-  <a href="#产出示例">产出示例</a> ·
+  <a href="#解决哪些问题">解决哪些问题</a> ·
+  <a href="#产出示例">看看效果</a> ·
+  <a href="#一句话开始">怎么使用</a> ·
   <a href="#安装">安装</a> ·
-  <a href="#一句话开始">使用</a> ·
-  <a href="skills/sitecraft/SKILL.md">技能规范</a> ·
   <a href="#历史作品参考">历史作品</a>
 </p>
 
+你可能很清楚自己想要什么：花店要浪漫大气，宠物门店要干净亲切，自己的品牌要让人记得住。可一到做官网，就卡在配图、排版、颜色和动画上。
+
+**Sitecraft 最想解决的，就是这件事：哪怕不会写代码、不懂网页设计，也能通过简单几句话，把品牌官网做得漂亮、有自己的气质。**
+
+它是一套给 AI 使用的官网设计 Skill。你负责说清品牌、用途和喜欢的感觉，AI 按这套方法查找参考、组织页面、处理素材，再把实际画面打开检查和修改。你也可以继续用“再大气一点”“手机上字太小了”这样的日常反馈调整。
+
+## 解决哪些问题
+
+| 你遇到的问题 | Sitecraft 帮你怎样解决 |
+| --- | --- |
+| 有品牌、有想法，却不会把它做成网页 | 从几句业务描述开始，由 AI 补足页面组织和设计细节，做出可以打开预览的官网。 |
+| AI 做出来很整齐，却一眼像通用模板 | 结合品牌与实际素材看参考，重新决定配色、字体和构图，减少跨行业重复套用同一种外观。 |
+| 想要“简约、大气、亲切”，说不出设计术语 | 把这些感受落实到主体大小、文字主次、图片和留白，不要求你先写专业设计简报。 |
+| 首屏不错，往下看却粗糙；电脑好看，手机拥挤 | 检查整页与手机画面，重新安排内容和操作，而不只美化一张封面。 |
+| 想要灵动的效果，却只得到生硬动画和不协调的弹窗 | 让角色动作、页面切换、光影以及按钮和菜单的状态共同服务当前主题。 |
+| 拿到一堆代码，不知道能不能交付 | 整理完整静态文件，检查图片、包体和资源是否齐全，并提供预览与部署说明。 |
+
+适合想展示产品、服务或作品的品牌主理人、门店经营者、创作者与小团队。正式接入订单、支付、会员或 AI 服务时，再按实际业务补充相应系统。
+
 ## 产出示例
 
-四个可运行示例，包含可编辑源码、静态成品、构建脚本与独立说明。截图均来自实际运行的网页；点击图片可查看大图。
+宠物门店、鲜花零售、兴趣社区和宠物健康助手，各自有不同的样子。下面的截图来自实际运行的网页，点击可查看大图；对应源码与成品也一并开源。
 
 <table>
 <tr>
 <td width="50%" valign="top">
 <a href="docs/images/pawly.webp"><img src="docs/images/pawly.webp" alt="Pawly 宠物 AI 问诊官网，紫色 3D 猫咪与症状输入入口" width="100%"></a>
 <h3>Pawly · 宠物 AI 问诊</h3>
-<p>真实 WebGL 猫咪、独立头部跟随鼠标、动态光照、点头互动。问诊流程在本机整理信息，可下载观察摘要。</p>
+<p>一句“放一只会跟着鼠标转头的 3D 猫咪”，落实成能打招呼、会点头的首页角色，并配上可操作的问诊演示。</p>
 <p><a href="examples/pawly">查看源码与运行说明 →</a></p>
 </td>
 <td width="50%" valign="top">
 <a href="docs/images/fluff-club.webp"><img src="docs/images/fluff-club.webp" alt="蓬蓬俱乐部宠物洗美官网，钴蓝底与黄色浴缸中的小狗" width="100%"></a>
 <h3>蓬蓬俱乐部 · 宠物洗美</h3>
-<p>钴蓝与明黄、轻松的门店气氛。服务浏览、预约预览，以及经过实际展开检查的选择控件。</p>
+<p>让顾客一眼感受到干净、亲切和轻松。服务介绍、预约体验和手机浏览一起完成。</p>
 <p><a href="examples/fluff-club">查看源码与运行说明 →</a></p>
 </td>
 </tr>
@@ -39,13 +59,13 @@
 <td width="50%" valign="top">
 <a href="docs/images/jigen-station.webp"><img src="docs/images/jigen-station.webp" alt="次元站官网，黄昏海边站台的沉浸式二次元场景" width="100%"></a>
 <h3>次元站 · 二次元聚集地</h3>
-<p>海边站台、屋顶放映与画室构成连续观看体验。章节、光影和页面操作共同参与场景。</p>
+<p>把“想做一个二次元聚集地”变成能走进的海边站台、放映室与画室，页面随着浏览展开。</p>
 <p><a href="examples/jigen-station">查看源码与运行说明 →</a></p>
 </td>
 <td width="50%" valign="top">
 <a href="docs/images/zhijian-florist.webp"><img src="docs/images/zhijian-florist.webp" alt="枝间花店官网，白底黑色大标题与自然红玫瑰花束" width="100%"></a>
 <h3>枝间 · 鲜花零售</h3>
-<p>纯白底、放大的中文排字与自然红玫瑰。花束选择、送花建议和本机花单形成完整浏览路径。</p>
+<p>把“白底、简约、大气、表达爱情”落实成自然红玫瑰与醒目的标题，让挑花和整理花单也顺手。</p>
 <p><a href="examples/zhijian-florist">查看源码与运行说明 →</a></p>
 </td>
 </tr>
@@ -53,7 +73,44 @@
 
 > 这些页面经过不同版本的迭代和反馈，并非全部由当前版本一次生成。Pawly 是静态问诊流程演示，未连接真实 AI 或兽医；其余示例的预约、社区、价格与订单也属于演示设定。具体边界见各自 README。
 
+## 一句话开始
+
+先在支持 Skill 的 Codex 中安装 Sitecraft，再像和设计伙伴聊天一样描述需求：
+
+```text
+用 Sitecraft 帮我做一个宠物洗美门店官网。
+想要明亮、干净、有亲和力，让顾客一眼看懂服务，也方便联系我。
+```
+
+也可以更简单：
+
+```text
+用 Sitecraft 做一家鲜花零售门店的品牌官网，简约、大气、有浪漫感。
+```
+
+看过预览后，继续说你的感受：
+
+```text
+这个颜色不太像我的品牌，想更明亮一些。
+首页的花束可以再大一点，手机上也要看得舒服。
+```
+
+不必先决定用什么框架、写哪些 CSS 或选哪套动画库。有 Logo、产品图或参考页面时直接提供；只有业务描述时，AI 也应先作合理设计并完成预览。
+
+自然语言可以说“用 Sitecraft”或“用官网设计”；想明确指定技能时使用 `$sitecraft`。技能也提供“静态官网”“企业官网”“静态网页”“纯静态”“官网”等选择线索，具体是否自动加载由宿主与模型决定。
+
 ## 安装
+
+在 Codex 对话里说：
+
+```text
+请从 https://github.com/zcjunblog/sitecraft 安装 skills/sitecraft 这个 Skill。
+```
+
+安装完成后，在下一轮对话中使用。你需要已有可使用 Skill 的 Codex 环境；正式上线还涉及域名与托管，可以继续让 AI 协助处理。
+
+<details>
+<summary>熟悉终端的话 也可以手动安装</summary>
 
 需要 Git 和 Python 3.9+，在终端运行：
 
@@ -64,33 +121,11 @@ python3 sitecraft/tools/install.py
 
 默认安装到 `~/.codex/skills/sitecraft`；设置了 `CODEX_HOME` 时安装到其 `skills/` 目录。安装器仅复制 Skill，已有版本会备份到技能目录之外，不会把示例、截图展示页和开发依赖一起装入。安装后在下一轮对话中调用。
 
-也可以在 Codex 中直接说：
-
-```text
-请从 https://github.com/zcjunblog/sitecraft 安装 skills/sitecraft 这个 Skill。
-```
-
 [下载独立 Skill 压缩包](https://github.com/zcjunblog/sitecraft/releases/latest/download/sitecraft.zip) · [查看安装器](tools/install.py)
 
-## 一句话开始
+</details>
 
-```text
-$sitecraft 做一个宠物 AI 问诊官网，首页放一只 3D 猫咪，头部平滑跟随鼠标。
-```
-
-```text
-用 Sitecraft 做一家鲜花零售门店官网，明亮、简约、大气。
-```
-
-```text
-做一个企业官网，突出真实产品和制造工艺，交付可直接上传的静态部署包。
-```
-
-自然语言可使用“Sitecraft”或“官网设计”，显式调用为 `$sitecraft`。出现“静态官网”“企业官网”“静态网页”“纯静态”“官网”时，技能会向宿主提供自动选择指引；具体是否加载仍由宿主与模型决定。
-
-缺少名称、配色或栏目时，执行者根据主题作合理默认，完成制作和复查；已有品牌、明确参考及局部修改范围优先。
-
-## 它怎样工作
+## 为了让官网好看 它会帮你做什么
 
 | 环节 | 具体做什么 |
 | --- | --- |
@@ -102,26 +137,6 @@ $sitecraft 做一个宠物 AI 问诊官网，首页放一只 3D 猫咪，头部�
 | 按部署包验收 | 检查图片处理、标准压缩、版本化资源、包体积及资源完整性，再从最终包预览和测量首页加载。 |
 
 Skill 通过说明、参考图和可执行检查器指导制作。成品仍取决于模型、素材、浏览器能力和实际修订；当前案例不足以证明每个主题都能一次命中审美，也不以测试全绿替代视觉判断。
-
-## 本地查看示例
-
-无需先构建，仓库已经包含静态成品：
-
-```sh
-cd sitecraft
-python3 -m http.server 8080 --directory examples/pawly/site
-```
-
-打开 `http://127.0.0.1:8080/`，将目录替换为下表路径即可切换项目：
-
-| 示例 | 静态成品 | 可编辑源码 |
-| --- | --- | --- |
-| Pawly | [`examples/pawly/site`](examples/pawly/site) | [`source`](examples/pawly/source) |
-| 蓬蓬俱乐部 | [`examples/fluff-club/site`](examples/fluff-club/site) | [`source`](examples/fluff-club/source) |
-| 次元站 | [`examples/jigen-station/site`](examples/jigen-station/site) | [`source`](examples/jigen-station/source) |
-| 枝间花店 | [`examples/zhijian-florist/site`](examples/zhijian-florist/site) | [`source`](examples/zhijian-florist/source) |
-
-本地 HTTP 服务只负责提供文件，运行这些页面不需要 Node 后端或数据库。修改源码后，在对应示例目录执行 `npm ci && npm run build`；具体 Node 要求见各示例说明。正式部署上传 `site/` 的内容。
 
 ## 历史作品参考
 
@@ -146,6 +161,33 @@ python3 -m http.server 8080 --directory examples/pawly/site
 
 截图采集于 2026-11-03；线上内容可能继续更新。[截图与素材来源](docs/asset-provenance.md)
 
+## 示例源码与开发说明
+
+四个示例都提供可编辑源码、就绪静态成品和独立说明，方便进一步学习、修改或部署。
+
+### 本地查看示例
+
+无需先构建，仓库已经包含静态成品：
+
+```sh
+cd sitecraft
+python3 -m http.server 8080 --directory examples/pawly/site
+```
+
+打开 `http://127.0.0.1:8080/`，将目录替换为下表路径即可切换项目：
+
+| 示例 | 静态成品 | 可编辑源码 |
+| --- | --- | --- |
+| Pawly | [`examples/pawly/site`](examples/pawly/site) | [`source`](examples/pawly/source) |
+| 蓬蓬俱乐部 | [`examples/fluff-club/site`](examples/fluff-club/site) | [`source`](examples/fluff-club/source) |
+| 次元站 | [`examples/jigen-station/site`](examples/jigen-station/site) | [`source`](examples/jigen-station/source) |
+| 枝间花店 | [`examples/zhijian-florist/site`](examples/zhijian-florist/site) | [`source`](examples/zhijian-florist/source) |
+
+本地 HTTP 服务只负责提供文件，运行这些页面不需要 Node 后端或数据库。修改源码后，在对应示例目录执行 `npm ci && npm run build`；具体 Node 要求见各示例说明。正式部署上传 `site/` 的内容。
+
+<details>
+<summary>仓库结构 验证与贡献</summary>
+
 ## 仓库结构
 
 ```text
@@ -168,6 +210,9 @@ python3 -B -m unittest discover -s skills/sitecraft/tests -p 'test_*.py'
 静态发布检查器与首页性能工具位于 [`skills/sitecraft/scripts`](skills/sitecraft/scripts)，完整操作见[静态发布规范](skills/sitecraft/references/static-release.md)。性能工具需要调用者已有的 Playwright 与浏览器，不会自动安装；本地测量不能当成线上速度。
 
 欢迎提交带有**原始需求、实际截图、问题位置与修改后对照**的 Issue 或 PR。新增案例请说明适用条件和局限，不把某个品牌的颜色或字体固化为所有项目的答案。
+
+
+</details>
 
 ## 许可
 

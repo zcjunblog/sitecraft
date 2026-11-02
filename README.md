@@ -109,6 +109,24 @@
 
 安装完成后，在下一轮对话中使用。你需要已有可使用 Skill 的 Codex 环境；正式上线还涉及域名与托管，可以继续让 AI 协助处理。
 
+### 通过 Skills CLI 安装
+
+如果已有 Node.js 和 npm，也可以在终端运行这条已实际验证的命令：
+
+```sh
+npx skills add zcjunblog/sitecraft --skill sitecraft
+```
+
+按提示选择 Codex 和安装范围，看到 `Installation complete` 即表示安装完成。CLI 默认安装到当前项目；希望跨项目使用时加上 `-g`：
+
+```sh
+npx skills add zcjunblog/sitecraft --skill sitecraft -g
+```
+
+CLI 后续可能推荐安装 `find-skills`，它是另一个可选技能，Sitecraft 不依赖它。若安装后宿主未显示 Sitecraft，重新加载或重启宿主后再查看。
+
+[在 skills.sh 查看 Sitecraft](https://www.skills.sh/zcjunblog/sitecraft/sitecraft)
+
 <details>
 <summary>熟悉终端的话 也可以手动安装</summary>
 

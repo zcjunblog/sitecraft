@@ -15,7 +15,7 @@ SOURCE = ROOT / 'skills' / 'sitecraft'
 SKIP_DIRS = {'tests', 'evals', 'agents', '__pycache__'}
 SKIP_NAMES = {'.DS_Store'}
 VERSION = '0.1.0'
-WORKBUDDY_VERSION = '0.4.0'
+WORKBUDDY_VERSION = '0.4.1'
 
 BASE_DESCRIPTION = (
     '用几句日常描述直接产出漂亮、有品牌感的静态官网（HTML/CSS/JS），'
@@ -23,6 +23,16 @@ BASE_DESCRIPTION = (
     '触发词：静态官网、企业官网、静态网页、纯静态、官网、官网设计、3D 网站、3D 首屏、Sitecraft、sitecraft、$sitecraft。'
 )
 DESCRIPTION_ZH = '不懂技术，也能用几句日常描述，做出漂亮、有品牌感的官网。'
+WORKBUDDY_DESCRIPTION_ZH = (
+    '用几句日常描述制作有品牌感的静态官网，适合门店、品牌、产品和作品展示。'
+    '提供五种可执行首屏资产、原创整站组件、真实 DOM 工作台、环境探测和证据归集；'
+    '按主题设计 Motion、转场与光影，检查手机布局和静态部署包。开源免费，不含购买流程。'
+    '验证：51 项 Python 与 19 项浏览器检查通过，花店、宠物洗美和协作软件三组任务完成七阶段与部署包复核。'
+    '截图、日志、三份成品源码与复现素材：https://github.com/zcjunblog/sitecraft/releases/tag/v0.4.1 。'
+    '固定素材首稿对照与限制：https://github.com/zcjunblog/sitecraft/blob/main/docs/validation/0.4.0.md 。'
+    '本轮为单样本与 AI 自审，只观察到局部改善，未证明更省时或每次都更好看；宠物最终交付有预算干预。'
+    '完整自动验收需要 Python、Node、Playwright 和浏览器，本次仅验证本机 WorkBuddy；可选生图由宿主提供，可能消耗宿主积分。'
+)
 DESCRIPTION_EN = 'Create beautiful brand websites from a few plain-language sentences.'
 EXAMPLES_ZH = [
     '用 Sitecraft 做一个宠物洗美门店官网，明亮、干净、有亲和力，让顾客看懂服务并方便联系我。',
@@ -46,7 +56,7 @@ FRONTMATTER = {
         '  根据简短的业务需求制作或精修静态官网、企业官网、品牌站和落地页。'
         '  适用于官网设计、3D 网站、交互式 3D 首屏、产品模型展示或静态部署包检查。\n'
         'description_zh: |\n'
-        f'  {DESCRIPTION_ZH}\n'
+        f'  {WORKBUDDY_DESCRIPTION_ZH}\n'
         'description_en: |\n'
         f'  {DESCRIPTION_EN}\n'
         'examples_zh:\n' + ''.join(f'  - {line}\n' for line in EXAMPLES_ZH) +

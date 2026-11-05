@@ -2,6 +2,10 @@
 
 仓库根目录的 MIT 许可适用于维护者有权授权的技能文本、脚本及示例代码；第三方软件、模型、品牌截图与其中的商标/作品仍按各自来源和许可处理。此文件不为第三方资产重新授予 MIT 许可，也不表示有关品牌参与或认可本项目。
 
+## 落地页版式数据
+
+技能包的 `references/landing-patterns.json` 收录了 UI UX Pro Max 落地页目录中的版式名称、栏目顺序和操作位置，并转为 JSON。来源固定到 [上游提交与原始数据](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill/blob/ccce51cba388476d4f403091ddb91636d5cd9fed/src/ui-ux-pro-max/data/landing.csv)，随包保留 [Next Level Builder 的 MIT 许可原文](skills/sitecraft/references/landing-patterns-LICENSE.txt)。
+
 ## 示例图片
 
 `fluff-club` 的宠物与店内图片、`jigen-station` 早期 station/studio/screening 插画、`zhijian-florist` 早期 peach/white/pink/sunny 花束有本地内置 image_gen / imagegen 的生成说明，属于为虚构演示项目制作的原创 AI 生成演示素材，不是真实门店、商品实拍、客户或医疗背书。后续替换图片的逐图证据缺口见 [素材溯源](docs/asset-provenance.md)，不能仅凭文件名把所有位图认定为同一次生成。

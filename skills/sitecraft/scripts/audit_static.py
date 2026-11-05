@@ -346,7 +346,7 @@ def audit(args):
 
     status = 'fail' if any(i['level'] == 'error' for i in issues) else 'needs_review' if issues else 'pass'
     return {'scope': 'Static artifact audit; gzip is a local estimate, not wire bytes. Not a page-speed or visual-quality certificate.',
-            'status': status, 'summary': {'file_count': len(files), 'uncompressed_bytes': sum(f['bytes'] for f in files),
+            'root': str(root), 'status': status, 'summary': {'file_count': len(files), 'uncompressed_bytes': sum(f['bytes'] for f in files),
             'image_bytes': sum(i['bytes'] for i in images),
             'text_gzip_estimate_bytes': sum(f.get('gzip_estimate_bytes', 0) for f in files)},
             'budgets': {'max_archive_kib': args.max_archive_kib, 'max_image_kib': args.max_image_kib, 'kind': 'review thresholds, not universal limits'},

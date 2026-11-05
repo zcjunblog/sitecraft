@@ -15,7 +15,7 @@ SOURCE = ROOT / 'skills' / 'sitecraft'
 SKIP_DIRS = {'tests', 'evals', 'agents', '__pycache__'}
 SKIP_NAMES = {'.DS_Store'}
 VERSION = '0.1.0'
-WORKBUDDY_VERSION = '0.3.0'
+WORKBUDDY_VERSION = '0.4.0'
 
 BASE_DESCRIPTION = (
     '用几句日常描述直接产出漂亮、有品牌感的静态官网（HTML/CSS/JS），'
@@ -139,7 +139,7 @@ def check_links(document, text):
     return sorted(set(missing))
 
 
-def build(target, outdir, zipname):
+def build(target, outdir, zipname, stage_only=False):
     staging = outdir / 'sitecraft'
     if staging.exists():
         shutil.rmtree(staging)
@@ -155,7 +155,7 @@ def build(target, outdir, zipname):
     # SkillHub rejects extension-less files; keep the license text readable by both hosts.
     license_name = 'LICENSE.md' if target == 'skillhub' else 'LICENSE'
     shutil.copy2(SOURCE / 'LICENSE', staging / license_name)
-    for sub in ('references', 'scripts'):
+    for sub in ('references', 'scripts', 'assets'):
         shutil.copytree(SOURCE / sub, staging / sub,
                         ignore=shutil.ignore_patterns(*SKIP_NAMES, '__pycache__'))
 
@@ -169,6 +169,10 @@ def build(target, outdir, zipname):
         missing += [f'{ref.name}: {m}' for m in check_links(ref, ref.read_text(encoding='utf-8'))]
     if missing:
         raise SystemExit(f'Broken relative links: {missing}')
+
+    if stage_only:
+        print(f'Unpacked validation candidate: {staging}; no submission ZIP created.')
+        return staging
 
     zippath = outdir / zipname
     files = sorted(iter_files(staging))
@@ -188,10 +192,13 @@ def build(target, outdir, zipname):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('target', choices=sorted(FRONTMATTER))
+    parser.add_argument('--stage-only', action='store_true', help='Prepare an unpacked candidate for testing, without a submission ZIP')
     args = parser.parse_args()
     version = WORKBUDDY_VERSION if args.target == 'workbuddy' else VERSION
     outdir = ROOT / 'outputs' / args.target
     if args.target == 'workbuddy':
         outdir /= version
+    if args.stage_only:
+        outdir /= 'candidate'
     outdir.mkdir(parents=True, exist_ok=True)
-    build(args.target, outdir, f'sitecraft-{args.target}-{version}.zip')
+    build(args.target, outdir, f'sitecraft-{args.target}-{version}.zip', stage_only=args.stage_only)

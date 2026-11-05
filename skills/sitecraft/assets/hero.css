@@ -1,0 +1,79 @@
+/* Original Sitecraft layout recipes. Values are adaptation starting points. */
+:root { color-scheme: light; --paper:#fff; --ink:#191919; --muted:#626262; --accent:#244f46; --gutter:clamp(1.25rem,5vw,5rem); --measure:78rem; --heading:clamp(3rem,6.4vw,6.25rem); }
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; line-height:1.65; }
+a { color:inherit; text-underline-offset:.25em; }
+img { display:block; max-width:100%; }
+button,a { -webkit-tap-highlight-color:transparent; }
+a:focus-visible { outline:3px solid var(--accent); outline-offset:6px; }
+.site-header { display:flex; justify-content:space-between; align-items:center; gap:1.5rem; padding:1.25rem var(--gutter); }
+.wordmark { text-decoration:none; font-weight:700; font-size:1.25rem; letter-spacing:0; }
+.header-action { font-size:.9375rem; }
+.hero { position:relative; padding:clamp(2.5rem,6vw,6rem) var(--gutter); }
+.hero-inner { max-width:var(--measure); margin-inline:auto; }
+.hero-copy { position:relative; z-index:2; }
+h1 { margin:0; max-width:12em; font-size:var(--heading); line-height:1.08; font-weight:700; letter-spacing:-.035em; overflow-wrap:anywhere; text-wrap:balance; }
+.intro { max-width:32em; margin:1.5rem 0 2rem; font-size:1.125rem; color:var(--muted); }
+.primary { display:inline-flex; align-items:center; justify-content:center; min-height:3rem; padding:.75rem 1.5rem; background:var(--accent); color:#fff; text-decoration:none; font-weight:600; border-radius:2px; transition:background-color 180ms,transform 180ms; }
+.primary:hover { transform:translateY(-2px); }
+.hero-media { margin:0; min-width:0; }
+.hero-media img { width:100%; height:100%; object-fit:contain; }
+.media-caption { margin:.75rem 0 0; font-size:.9375rem; }
+.details { max-width:var(--measure); margin:0 auto; padding:4rem var(--gutter); scroll-margin-top:1rem; }
+.details h2 { font-size:clamp(1.75rem,3vw,2.5rem); line-height:1.25; }
+.details p { max-width:45em; font-size:1.0625rem; }
+/* Single object and central reading axis: an actual image must carry the scene. */
+[data-recipe="object-focus"] .hero-inner { display:flex; flex-direction:column; align-items:center; text-align:center; }
+[data-recipe="object-focus"] h1 { max-width:10em; }
+[data-recipe="object-focus"] .intro { margin-inline:auto; }
+[data-recipe="object-focus"] .hero-media { order:2; width:min(54rem,78vw); height:clamp(15rem,31vw,27rem); margin:2rem auto 0; }
+/* The image lights the scene; copy occupies a deliberately clear region. */
+[data-recipe="scene-immersive"] { --paper:#111715; --ink:#fff; --muted:#e0e8e3; --accent:#f3f5ef; color-scheme:dark; }
+[data-recipe="scene-immersive"] .primary { color:#132019; }
+[data-recipe="scene-immersive"] .hero { min-height:calc(100svh - 5rem); display:grid; align-items:end; isolation:isolate; }
+[data-recipe="scene-immersive"] .hero-inner { width:100%; }
+[data-recipe="scene-immersive"] .hero-copy { max-width:45rem; padding-block:6rem 2rem; }
+[data-recipe="scene-immersive"] .hero-media { position:absolute; inset:0; z-index:-2; }
+[data-recipe="scene-immersive"] .hero-media img { object-fit:cover; object-position:var(--focal-desktop,60% 50%); }
+[data-recipe="scene-immersive"] .hero::after { content:""; position:absolute; inset:0; z-index:-1; background:linear-gradient(90deg,rgba(0,0,0,.67),rgba(0,0,0,.04) 85%),linear-gradient(0deg,rgba(0,0,0,.45),transparent 65%); }
+/* Type opens the story; a real product surface spans the lower field. */
+[data-recipe="work-surface"] { --paper:#101214; --ink:#f5f6f7; --muted:#aeb5bc; --accent:#eef1f5; --heading:clamp(2.75rem,5.2vw,5rem); color-scheme:dark; }
+[data-recipe="work-surface"] .primary { color:#101214; }
+[data-recipe="work-surface"] h1 { max-width:15em; }
+[data-recipe="work-surface"] .hero-media { margin-top:3.5rem; border:1px solid #343a40; border-radius:.75rem; overflow:hidden; }
+[data-recipe="work-surface"] .hero-media img { object-fit:contain; height:auto; }
+/* Collection as the main content: categories and works share the first field. */
+[data-recipe="collection-led"] { --heading:clamp(3rem,6vw,6rem); }
+[data-recipe="collection-led"] .hero-inner { display:grid; grid-template-columns:minmax(12rem,.8fr) minmax(0,2fr); gap:clamp(2rem,4vw,4rem); }
+[data-recipe="collection-led"] h1 { max-width:7em; }
+[data-recipe="collection-led"] .gallery { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,16rem),1fr)); gap:1.5rem; align-items:start; }
+[data-recipe="collection-led"] .hero-media img { height:auto; aspect-ratio:2/3; object-fit:cover; object-position:var(--focal-desktop,50% 50%); }
+/* Visible product volume balances a specific Chinese headline. */
+[data-recipe="retail-object"] { --accent:#a92338; }
+[data-recipe="retail-object"] .hero-inner { display:grid; grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr); align-items:center; gap:2rem; }
+[data-recipe="retail-object"] h1 { max-width:7em; }
+[data-recipe="retail-object"] .hero-media { height:clamp(24rem,42vw,40rem); }
+@media (max-width:780px) {
+  :root { --gutter:1.25rem; --heading:clamp(2.5rem,10.5vw,3.75rem); }
+  .site-header { padding-block:1rem; }
+  .wordmark { font-size:1.125rem; }
+  .hero { padding-block:2.25rem; }
+  h1 { letter-spacing:-.025em; }
+  .intro { font-size:1rem; margin-block:1.25rem 1.5rem; }
+  [data-recipe="object-focus"] .hero-media { width:100%; height:14rem; margin-top:2rem; }
+  [data-recipe="scene-immersive"] .hero { min-height:calc(100svh - 4.5rem); }
+  [data-recipe="scene-immersive"] .hero-copy { padding-block:10rem 2rem; }
+  [data-recipe="scene-immersive"] .hero-media img { object-position:var(--focal-mobile,65% 50%); }
+  [data-recipe="scene-immersive"] .hero::after { background:linear-gradient(0deg,rgba(0,0,0,.85),rgba(0,0,0,.1) 100%); }
+  [data-recipe="work-surface"] { --heading:clamp(2.5rem,10vw,3.5rem); }
+  [data-recipe="work-surface"] .hero-media { margin-top:2rem; }
+  [data-recipe="collection-led"] .hero-inner,[data-recipe="retail-object"] .hero-inner { grid-template-columns:1fr; gap:2rem; }
+  [data-recipe="collection-led"] .gallery { grid-template-columns:1fr; }
+  [data-recipe="collection-led"] .hero-media img { aspect-ratio:4/5; object-position:var(--focal-mobile,50% 45%); }
+  [data-recipe="retail-object"] .hero-copy { text-align:center; }
+  [data-recipe="retail-object"] h1,[data-recipe="retail-object"] .intro { margin-inline:auto; }
+  [data-recipe="retail-object"] .hero-media { height:auto; }
+  [data-recipe="retail-object"] .hero-media img { height:auto; max-height:25rem; }
+}
+@media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .primary { transition:none; } .primary:hover { transform:none; } }

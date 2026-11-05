@@ -1,0 +1,384 @@
+{
+  "schema_version": 1,
+  "parameter_notice": "所有数值是原创骨架的适配起点，不是原站DOM测量或普适美观标准。历史参考截图不证明当前原站状态。",
+  "cases": [
+    {
+      "id": "object-focus",
+      "name": "单一实物与中央阅读轴",
+      "tags": [
+        "产品",
+        "珠宝",
+        "器物",
+        "鲜花",
+        "product",
+        "jewelry"
+      ],
+      "fit": "有一张细节充分、背景干净的主体图；访客先理解单件产品，再行动。",
+      "avoid": "需要并排挑选大量商品，或素材只是低细节示意。",
+      "source": {
+        "url": "https://www.apple.com.cn/mac-mini/",
+        "date": "2026-11-03",
+        "kind": "external-brand",
+        "scope": "桌面与手机历史单帧；未从截图推断动效。",
+        "captures": {
+          "desktop": "benchmarks/apple-desktop.webp",
+          "mobile": "benchmarks/apple-mobile.webp"
+        }
+      },
+      "not_borrowing": "Apple 字标、产品图、口号、价格、蓝色按钮参数。",
+      "relations": [
+        {
+          "id": "composition",
+          "observed": "标题、实物、产品信息沿同一中央阅读轴组织。",
+          "purpose": "使单一产品的存在感成为焦点。",
+          "desktop": "居中纵向编排；主体容器 min(54rem,78vw)，高15–27rem；保留轮廓周围空间。",
+          "mobile": "先保留短标题与行动，再以约14rem高完整呈现实物；依据实际长标题调间距，不能把按钮推走。",
+          "hook": ".hero-inner / .hero-media"
+        },
+        {
+          "id": "typography",
+          "observed": "简短中文重字与较小产品说明形成两级。",
+          "purpose": "用中文字形和语义建立尺度，而非照抄英文字符宽度。",
+          "desktop": "中文标题 clamp(3rem,6.4vw,6.25rem)、700、1.08；按完整语义换行。",
+          "mobile": "标题 clamp(2.5rem,10.5vw,3.75rem)，正文1rem；长品牌名先改段宽与措辞，不全页缩小。",
+          "hook": "h1 / .intro"
+        },
+        {
+          "id": "imagery",
+          "observed": "金属实物完整轮廓与表面细节承担画面。",
+          "purpose": "素材撑起留白。",
+          "desktop": "自有主体图 object-fit:contain，保留接触阴影；不用参考里的产品。",
+          "mobile": "保留全轮廓；检查透明边界与白边，不截掉识别部位。",
+          "hook": ".hero-media img"
+        },
+        {
+          "id": "light_material",
+          "observed": "柔和浅背景后退，银色材质与自然阴影清楚。",
+          "purpose": "光线服从实物而非添加无关光晕。",
+          "desktop": "由本项目主体图决定背景明度与接触阴影；CSS起点白色，不强制品牌最终用白色。",
+          "mobile": "缩小后仍能分辨轮廓与材质；关键文字不压在高光上。",
+          "hook": "--paper / 主图素材"
+        },
+        {
+          "id": "action",
+          "observed": "购买动作与当前产品信息相邻。",
+          "purpose": "动作对象清楚。",
+          "desktop": "唯一主要入口紧接实际介绍，最小高3rem，目标内容同时存在。",
+          "mobile": "标题、说明、动作构成连续阅读块，首屏可达。",
+          "hook": ".primary"
+        },
+        {
+          "id": "mobile",
+          "observed": "手机沿纵轴重排产品信息和操作。",
+          "purpose": "完整观看与主要任务兼顾。",
+          "desktop": "桌面主体与文字同轴，但尺寸由当前内容决定。",
+          "mobile": "手机不复制桌面空白高度；主按钮在初始视口，图片自然延续。",
+          "hook": "@media / .hero-copy"
+        }
+      ]
+    },
+    {
+      "id": "scene-immersive",
+      "name": "场景主导与图上阅读区",
+      "tags": [
+        "酒店",
+        "旅行",
+        "展览",
+        "二次元",
+        "空间",
+        "沉浸",
+        "hotel",
+        "immersive"
+      ],
+      "fit": "有能代表空间或物体的高质量大场景图，图片里有可安放文字的区域。",
+      "avoid": "需要读清细密产品界面，或手机裁切后主体消失。",
+      "source": {
+        "url": "https://teenage.engineering/products",
+        "date": "2026-11-03",
+        "kind": "external-brand",
+        "scope": "只有桌面实图。手机和图上文案区域是 Sitecraft 提议，未经原站手机验证。",
+        "captures": {
+          "desktop": "benchmarks/teenage-desktop.webp"
+        }
+      },
+      "not_borrowing": "器材照片、品牌导航符号和橙色识别系统；不把静态反射当成已验证动态效果。",
+      "relations": [
+        {
+          "id": "composition",
+          "observed": "器材在深色大场景里占据很大尺度，导航退居上沿。",
+          "purpose": "让空间或物体成为主要视觉。",
+          "desktop": "场景延展到首屏，文字落在空区；左侧阅读区最大45rem，原图焦点起点60% 50%。",
+          "mobile": "这是待验证改编：焦点65% 50%、下方渐暗阅读区；若切掉主体则改用独立手机图。",
+          "hook": ".hero / --focal-desktop / --focal-mobile"
+        },
+        {
+          "id": "typography",
+          "observed": "原图主要由器材与紧凑导航构成，不含本骨架的营销大标题。",
+          "purpose": "新增文字应让场景仍可被看见。",
+          "desktop": "新增本项目中文标题，clamp(3rem,6.4vw,6.25rem)，占清晰负空间；不是原站字体复刻。",
+          "mobile": "改编标题2.5–3.75rem、正文1rem；检查实际亮区上的字与阴影。",
+          "hook": "h1 / .hero-copy"
+        },
+        {
+          "id": "imagery",
+          "observed": "器材近景有明确结构，原取景下缘允许局部裁切。",
+          "purpose": "场景中保留能识别主题的物体部位。",
+          "desktop": "仅用自有场景图，cover；裁切依据当前主体，而不是固定中心裁切。",
+          "mobile": "优先保留面部、花束或空间入口；必要时改独立手机取景，记录原因。",
+          "hook": ".hero-media img"
+        },
+        {
+          "id": "light_material",
+          "observed": "金属反射、暗部和少量局部色形成统一光线。",
+          "purpose": "材质是场景的组成部分。",
+          "desktop": "阅读蒙层仅保障文字；光源来自素材，不能用蒙层冒充动态光影。",
+          "mobile": "手机渐暗层保留主体明暗，文字避开高光；动效仍按单独流程取帧。",
+          "hook": ".hero::after"
+        },
+        {
+          "id": "action",
+          "observed": "截图只说明观看主体，不能证明操作状态。",
+          "purpose": "新增操作有实际目标。",
+          "desktop": "本项目主动作与介绍相邻，用清晰实色按钮，不复用原站复杂导航。",
+          "mobile": "按钮位于阅读块且首屏可达，不因背景移动而改变点击区域。",
+          "hook": ".primary"
+        },
+        {
+          "id": "mobile",
+          "observed": "未采集手机参考。",
+          "purpose": "不编造原站响应式行为。",
+          "desktop": "桌面只借鉴场景尺度与材质。",
+          "mobile": "Sitecraft改编：阅读块靠下、独立焦点、自然滚动；本项目必须看实际手机图才能判断。",
+          "hook": "@media"
+        }
+      ]
+    },
+    {
+      "id": "work-surface",
+      "name": "用途标题与真实工作画面",
+      "tags": [
+        "软件",
+        "AI",
+        "SaaS",
+        "工具",
+        "software",
+        "workflow"
+      ],
+      "fit": "有真实可展示的产品界面，或可明确标注的功能演示。",
+      "avoid": "没有产品能力却拟造一堆图表；只为显科技感而使用深色。",
+      "source": {
+        "url": "https://linear.app/",
+        "date": "2026-11-03",
+        "kind": "external-brand",
+        "scope": "桌面与手机历史单帧。手机界面小字不作为正文阅读范例。",
+        "captures": {
+          "desktop": "benchmarks/linear-desktop.webp",
+          "mobile": "benchmarks/linear-mobile.webp"
+        }
+      },
+      "not_borrowing": "Linear 品牌、功能截图和英文标题；演示界面不得冒充已上线功能。",
+      "relations": [
+        {
+          "id": "composition",
+          "observed": "大用途标题在上，宽工作界面在下，两者共同组织首屏。",
+          "purpose": "展示产品能做的事。",
+          "desktop": "标题最大15em，工作画面随后铺开；文字与界面沿同一左边界。",
+          "mobile": "标题、说明、动作、产品画面依次排列；不把桌面图简单缩成不可读正文。",
+          "hook": ".hero-copy / .hero-media"
+        },
+        {
+          "id": "typography",
+          "observed": "用途标题字重明确，辅助说明弱一级。",
+          "purpose": "真实中文用途可被快速读懂。",
+          "desktop": "标题2.75–5rem、700、1.08，描述不超过32em。",
+          "mobile": "标题2.5–3.5rem，正文1rem；按动词和对象重新断行。",
+          "hook": "h1 / .intro"
+        },
+        {
+          "id": "imagery",
+          "observed": "连贯的工作界面有真实内容和上下文。",
+          "purpose": "产品本身提供视觉细节。",
+          "desktop": "放实际工作界面/演示，不用随机指标卡；素材宽度与容器匹配。",
+          "mobile": "需要读清的内容改真实DOM或局部重点，整幅截图只承担背景上下文。",
+          "hook": ".hero-media img"
+        },
+        {
+          "id": "light_material",
+          "observed": "深背景和界面边界使层级可辨。",
+          "purpose": "边界服务工作内容。",
+          "desktop": "起点深色，但依品牌和产品本身调整；1px边界与0.75rem圆角用来分离工作区。",
+          "mobile": "界面与背景保留可辨边界，正文按实际对比度复查；无无意义发光球。",
+          "hook": "--paper / .hero-media"
+        },
+        {
+          "id": "action",
+          "observed": "原图有清楚的产品/账户入口。",
+          "purpose": "建立一个当前可验证的产品入口。",
+          "desktop": "主要入口指向真实演示或详情，目标与用途标题一致。",
+          "mobile": "主动作在产品大图之前，首屏可操作。",
+          "hook": ".primary"
+        },
+        {
+          "id": "mobile",
+          "observed": "手机标题重新换行，产品画面保留上下文。",
+          "purpose": "保留任务、压缩非必要空间。",
+          "desktop": "界面距文字起点3.5rem。",
+          "mobile": "间距降到2rem；文字保持真实尺寸，界面细字不得成为必读内容。",
+          "hook": "@media"
+        }
+      ]
+    },
+    {
+      "id": "collection-led",
+      "name": "内容目录直接构图",
+      "tags": [
+        "作品",
+        "图库",
+        "壁纸",
+        "花单",
+        "选购",
+        "摄影",
+        "catalog",
+        "portfolio"
+      ],
+      "fit": "访客主要任务是挑作品或商品，有多张内容质量成立的图片。",
+      "avoid": "只有一张低质量图，却补口号与假商品凑目录。",
+      "source": {
+        "url": "https://a24films.com/films",
+        "date": "2026-11-03",
+        "kind": "external-brand",
+        "scope": "只有桌面片单截图；手机为 Sitecraft 提议，需在本项目验证。",
+        "captures": {
+          "desktop": "benchmarks/a24-desktop.webp"
+        }
+      },
+      "not_borrowing": "影片海报、片名、字标、购票逻辑；不把海报内文字当网页正文。",
+      "relations": [
+        {
+          "id": "composition",
+          "observed": "类别大字位于左，作品海报和操作直接占右侧。",
+          "purpose": "把挑选提前到首屏。",
+          "desktop": "左类别栏与右作品区0.8:2，作品有自己的色彩；不先加一整屏通用宣言。",
+          "mobile": "改编：标题和主要入口在前，首个作品直接接续；不以压缩桌面三列应付手机。",
+          "hook": ".hero-inner / .gallery"
+        },
+        {
+          "id": "typography",
+          "observed": "类别是大字，作品名和状态紧贴对应作品。",
+          "purpose": "文字区分目录、对象与动作。",
+          "desktop": "类别标题最大7em、3–6rem；作品名至少0.9375rem，按当前内容调整。",
+          "mobile": "类别标题2.5–3.75rem，作品说明至少1rem供实际阅读。",
+          "hook": "h1 / .media-caption"
+        },
+        {
+          "id": "imagery",
+          "observed": "各海报保留不同色彩与人物。",
+          "purpose": "实际内容支撑视觉。",
+          "desktop": "自有作品按2:3容器起步；比例不适合时修改容器，不统一套滤镜。",
+          "mobile": "提议4:5取景；必须保留关键主体，不适合裁切则用原比例。",
+          "hook": ".gallery img"
+        },
+        {
+          "id": "light_material",
+          "observed": "白背景后退，作品的颜色和材质各自成立。",
+          "purpose": "不让站点装饰抢内容。",
+          "desktop": "以中性背景和必要间距承托内容，强调色由当前品牌决定。",
+          "mobile": "手机继续保留作品原貌；不靠统一褐色蒙层制造所谓质感。",
+          "hook": "--paper / --accent"
+        },
+        {
+          "id": "action",
+          "observed": "作品名与该作品的购票动作相邻。",
+          "purpose": "行动必须指向对应对象。",
+          "desktop": "骨架主动作可跳详情；多商品时把独立操作写在各商品，不能全都跳同一假入口。",
+          "mobile": "对象和操作不能因重排分离；首个选择入口可达。",
+          "hook": ".primary / .media-caption"
+        },
+        {
+          "id": "mobile",
+          "observed": "本组没有原站手机实图。",
+          "purpose": "明确改编的验证责任。",
+          "desktop": "桌面参考只用于分类与作品关系。",
+          "mobile": "Sitecraft提议单列，标题先行、作品连续；须在手机截图中核对挑选效率。",
+          "hook": "@media / .gallery"
+        }
+      ]
+    },
+    {
+      "id": "retail-object",
+      "name": "商品体量与中文标题平衡",
+      "tags": [
+        "花店",
+        "鲜花",
+        "零售",
+        "礼物",
+        "门店",
+        "florist",
+        "retail"
+      ],
+      "fit": "商品本身具有足够细节，用户希望突出单件主推与品牌情绪。",
+      "avoid": "任务是立即筛选大量商品，或主体图与背景严重不融合。",
+      "source": {
+        "url": "https://github.com/zcjunblog/sitecraft/tree/main/examples/zhijian-florist",
+        "date": "2026-11-03",
+        "kind": "local-feedback-case",
+        "scope": "枝间经多轮反馈后的认可稿；不能声称是外部商业参考或当前Skill首稿。",
+        "captures": {
+          "desktop": "visual-cases/flower-b-desktop.webp",
+          "mobile": "visual-cases/flower-b-mobile.webp"
+        }
+      },
+      "not_borrowing": "枝间名称、玫瑰图片、价格、爱情口号；不把这次认可的红白粗字固定为所有花店风格。",
+      "relations": [
+        {
+          "id": "composition",
+          "observed": "大体量自然花束与左侧中文重标题平衡，空间较完整。",
+          "purpose": "主体和文字共同表达清楚的品牌主题。",
+          "desktop": "两区起点0.85:1.15，标题最大7em，图片高24–40rem；看实际素材再调。",
+          "mobile": "按原案例观察，文字与动作在前、完整花束在后；不得被装饰挤出首屏。",
+          "hook": ".hero-inner / .hero-copy"
+        },
+        {
+          "id": "typography",
+          "observed": "黑色大标题分两行，文字尺度能与花束对抗。",
+          "purpose": "按本项目主题选择字形而非惯性抒情。",
+          "desktop": "中文标题3–6.25rem、700、1.08是骨架起点；用户CI与实际主题优先。",
+          "mobile": "标题2.5–3.75rem并重新断行，正文1rem；不用放大英文标签补气质。",
+          "hook": "h1 / .intro"
+        },
+        {
+          "id": "imagery",
+          "observed": "自然成束红玫瑰能看到花瓣、包装和接触阴影。",
+          "purpose": "真实物感与整体轮廓支持主题。",
+          "desktop": "自有商品图contain；先看轮廓联想再看细节，不复用参考花束。",
+          "mobile": "保留花束识别部位，宽度100%、高不超过25rem的起点按素材调整。",
+          "hook": ".hero-media img"
+        },
+        {
+          "id": "light_material",
+          "observed": "白底、包装纸、自然阴影在同一光线下。",
+          "purpose": "消除贴图感。",
+          "desktop": "根据本项目光线匹配背景与阴影；暗黄照片不直接放到白底硬字旁。",
+          "mobile": "缩小后检查边缘、阴影和白平衡；画面需重看，不以图片已加载替代。",
+          "hook": "--paper / 商品素材"
+        },
+        {
+          "id": "action",
+          "observed": "选花入口紧随品牌句和用途说明。",
+          "purpose": "让情绪直接连接挑选。",
+          "desktop": "实色主按钮和真实花单目标一起实现；红色仅为当前骨架默认，可按品牌修改。",
+          "mobile": "操作在花束之前可达，图像不能覆盖按钮。",
+          "hook": ".primary"
+        },
+        {
+          "id": "mobile",
+          "observed": "手机改为居中文字、动作、完整花束的纵向顺序。",
+          "purpose": "用重排保留品牌力度。",
+          "desktop": "桌面并列不是通用固定模板。",
+          "mobile": "保留完整花束；标题语义、按钮与商品之间距离按390px实际图核对。",
+          "hook": "@media"
+        }
+      ]
+    }
+  ]
+}

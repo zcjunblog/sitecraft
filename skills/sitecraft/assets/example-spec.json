@@ -1,0 +1,20 @@
+{
+  "case": "object-focus",
+  "request": "制作一个展示原创器物的静态品牌官网示例",
+  "brand": "未形",
+  "headline": "把形状，留给日常。",
+  "body": "从轮廓、触感到摆放的位置，看一件器物如何进入生活。",
+  "action": "看看作品",
+  "primary_target": "#objects",
+  "fit": "单件原创几何器物可完整呈现，中央阅读轴支持先看形态再了解设计。",
+  "media": [{"path": "sample-object.svg", "alt": "原创红色几何器物示意", "origin": "Sitecraft 原创 SVG；设计组件示例，不是真实商品"}],
+  "site": {
+    "sections": [
+      {"type": "collection", "id": "objects", "title": "从一个形状开始", "intro": "以下为布局与交互示例，展示内容不作为在售商品。", "items": [{"name": "轮廓 01", "description": "收窄的瓶口与展开的底部，让视觉重心自然落在台面。", "image": "sample-object.svg", "alt": "几何器物与底座", "origin": "Sitecraft 原创 SVG", "action": {"label": "聊聊这个设计", "href": "#contact"}}]},
+      {"type": "story", "id": "approach", "title": "看见形态，也看见用途。", "body": "选择一个清楚的主体，把材料、细节和使用情境放到相称的位置。每一处留白，都让观看更直接。"},
+      {"type": "services", "id": "details", "title": "设计从细节展开", "items": [{"name": "形态", "description": "观察整体比例与轮廓，保留最能说明对象的角度。"}, {"name": "材料", "description": "在自然明暗中理解表面与结构，不用额外装饰遮住主体。"}]},
+      {"type": "contact", "id": "contact", "title": "一起讨论新的形状。", "body": "这是一个本地咨询流程演示，输入仅用于本页预览。", "demo": true}
+    ],
+    "footer_note": "Sitecraft 原创组件示例 · 非真实商家，不接受订单。"
+  }
+}

@@ -26,14 +26,22 @@ flowchart TD
 | 阶段 | 必需产物 | 通过条件 |
 | --- | --- | --- |
 | brief 需求计划 | `brief` JSON | 原始需求、受众、页面标题、主要动作、内容、明确约束、效果范围和性能预算齐全，核对用户原话 |
-| references 参考选型 | `reference_notes` JSON、`reference_capture` 实图 | 记录真实来源、实际观察，以及主图、光线、字体和构图如何借鉴 |
+| references 参考选型 | `reference_notes` JSON、`reference_capture` 实图、`design_plan` JSON | 真实来源与观察；具体内容、项目素材及来源、六组关系的桌面/手机目标、借鉴边界和实际实现文件齐全 |
 | first-screen 首屏 | `entry`、`browser_report` JSON 及其两张截图 | 两视口主操作实际可达，标题和按钮首屏可见，资源与运行检查通过，另查背景主图与实际字形 |
-| visual 视觉评审 | `desktop`、`mobile` PNG | 看图记录品牌气质、层级与手机裁切的具体观察，有问题修复并复看 |
+| visual 视觉评审 | `desktop`、`mobile` PNG、`comparison` JSON/配套 HTML、`visual_review` JSON | 当前截图与登记参考的并排对照；两端六组关系逐项观察，已记录问题有修复前后图和复看，全部解决 |
 | site 整站与交互 | `entry`、`desktop_full`、`mobile_full` PNG、`interaction_log`、完整 `browser_report` | 整页、手机、控件、减少动态效果及适用的 Motion、转场、光影、WebGL 检查通过 |
 | performance 首页速度 | `mobile_report`、`desktop_report` JSON | 每端至少三次冷访问、一次热访问；标题正确、请求与运行无错误、观测完整，全部样本符合计划预算 |
 | delivery 最终包 | `package`、`audit_report`、`preview_audit`、`package_preview`、`handoff` | 包审计通过、SHA 与当前目录相符；从独立解压目录复验画面与主操作，图片画质和使用说明有实际记录 |
 
 `template` 生成每阶段所需的字段和检查项。填写 `checks` 时记录实际观察，`evidence` 引用同一报告的产物名称。`reviewer` 记录执行评审的 AI 或人员。空说明和缺失证据都无法登记通过。不能复制“通过”填满清单后宣称完成评审。
+
+推荐按 [整站组装与自动化](assembly-and-automation.md) 使用 `doctor` 复用环境、`prepare --observations` 自动归集本轮证据。视觉观察文件可以直接归并为阶段检查，无需重复填写总结或抄截图路径。自动生成的结果仍须 `record`，沿用全部顺序、回执、哈希与失败阻断条件。
+
+参考与视觉的具体格式和操作见 [可执行设计资产](executable-design-assets.md)。参考计划默认草稿，实际观察与改编明确后才标记 `ready`。关键词匹配不代表看过参考，原站只有桌面图时不能伪造手机依据；没有匹配资产时建立 custom 计划。
+
+视觉阶段先 `check --tool browser` 留下本次原生截图，再 `check --tool comparison --browser-report 本次报告路径`。工具从参考阶段取计划并生成带 SHA 的对照清单与自包含 HTML。新增 `reference_transfer` 的 `evidence` 必须同时引用 `comparison` 和 `visual_review`。报告中的两端 PNG 必须正是对照中的当前截图，不能另换更有利的图。`visual_review` 有十二项实际观察，默认未验证，问题记录在 `findings`；失败记录里的问题 ID 在后续尝试中保留并解决。计划、主图、参考或对照变化需要重做受影响的观察。
+
+对照工具核验来源与证据的一致性，不评审“美不美”；执行者必须打开图、记录实际区域与关系，自审明确标记 `self`。旧版本已通过但缺少设计计划的参考阶段会变为过期，保留历史并从 references 重新验收。
 
 ## 初始化并完成一个阶段
 

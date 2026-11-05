@@ -13,6 +13,9 @@ import zlib
 
 
 SCRIPT = Path(__file__).resolve().parents[1] / 'scripts' / 'workflow.py'
+sys.path.insert(0, str(SCRIPT.parent))
+from design_assets import make_plan
+from design_review import build_comparison, review_template
 STAGES = ('brief', 'references', 'first-screen', 'visual', 'site', 'performance', 'delivery')
 
 
@@ -84,6 +87,17 @@ class WorkflowTests(unittest.TestCase):
             path = self.run_dir / 'reference.png'
             path.write_bytes(png(600, 400))
             artifacts['reference_capture'] = str(path)
+            media = self.root / 'product.png'
+            media.write_bytes(png(32, 32, b'\0\0\xff\xff'))
+            plan = make_plan('retail-object', self.request)
+            plan.update(status='ready', case_id='custom')
+            plan['source'] = {'url': 'https://example.com/florist', 'date': '2026-11-05',
+                              'kind': 'test-fixture', 'scope': 'Synthetic desktop only; mobile is an adaptation',
+                              'captures': {'desktop': str(path)}}
+            plan['selection'].update(fit='A single flower introduces the retail choice', adaptations='Use actual Chinese text and a mobile action before media')
+            plan['content'] = {'brand': 'Flowers', 'headline': 'Pick flowers', 'body': 'Local flower choices',
+                               'action': 'View flowers', 'media': [{'path': str(media), 'alt': 'Fixture product', 'origin': 'Synthetic fixture'}]}
+            artifacts['design_plan'] = str(self.write('design-plan.json', plan))
         if stage in ('first-screen', 'site'):
             artifacts['entry'] = str(self.site / 'index.html')
             artifacts['browser_report'] = str(self.browser(stage, full=stage == 'site'))
@@ -93,6 +107,16 @@ class WorkflowTests(unittest.TestCase):
                 path = self.run_dir / f'{stage}-{key}.png'
                 path.write_bytes(png(width, height))
                 artifacts[key] = str(path)
+        if stage == 'visual':
+            browser = self.browser('visual')
+            artifacts['browser_report'] = str(browser)
+            comparison = self.run_dir / 'comparison.json'
+            if comparison.exists():
+                comparison.unlink()
+                comparison.with_suffix('.html').unlink()
+            build_comparison(self.run_dir / 'design-plan.json', browser, comparison)
+            artifacts['comparison'] = str(comparison)
+            artifacts['visual_review'] = str(self.visual_observations(comparison))
         if stage == 'performance':
             for profile in ('mobile', 'desktop'):
                 sample = {'cache_mode': 'cold', 'title': 'Flowers',
@@ -123,15 +147,28 @@ class WorkflowTests(unittest.TestCase):
             check.update(status='pass', detail='Observed the specific fixture requirement', evidence=[next(iter(artifacts))])
             if stage == 'site' and name in ('motion', 'transition', 'lighting', 'webgl') and not (name == 'motion' and self.motion):
                 check.update(status='not_applicable', detail='Explicitly disabled in the brief')
+            if name == 'reference_transfer':
+                check['evidence'] = ['comparison', 'visual_review']
         self.fixture_receipts(report)
         return self.write(stage + '-result.json', report)
+
+    def visual_observations(self, comparison):
+        review = review_template(comparison)
+        review.update(status='pass', reviewer='synthetic fixture reviewer', inspected=True)
+        for item in review['items']:
+            item.update(status='pass', region='Fixture first-screen content region',
+                        observation='Fixture text and image occupy the declared reading order',
+                        reference_relation='Fixture keeps subject and action adjacent',
+                        decision='Retain the fixture layout for gate validation only')
+        return self.write('visual-observations.json', review)
 
     def fixture_receipts(self, report):
         # Synthetic checker outputs exercise gate validation. A separate browser test exercises real capture.
         state = json.loads((self.run_dir / 'workflow.json').read_text())
         receipts = state['active'].setdefault('receipts', {})
         tools = {'browser_report': 'browser', 'mobile_report': 'mobile', 'desktop_report': 'desktop',
-                 'audit_report': 'audit', 'preview_audit': 'preview-audit', 'package_preview': 'preview'}
+                 'audit_report': 'audit', 'preview_audit': 'preview-audit', 'package_preview': 'preview',
+                 'comparison': 'comparison'}
         for name, value in report['artifacts'].items():
             path = Path(value)
             files = {str(path): hashlib.sha256(path.read_bytes()).hexdigest()}
@@ -309,6 +346,68 @@ class WorkflowTests(unittest.TestCase):
         Path(report['artifacts']['desktop']).write_bytes(png(1440, 900, b'\xff\0\0\xff'))
         self.cli('record', '--run', self.run_dir, '--stage', 'visual', '--evidence', path, code=1)
 
+    def test_reference_plan_must_be_ready_and_bound_to_the_capture(self):
+        self.through('brief')
+        path = self.prepare('references')
+        plan_path = self.run_dir / 'design-plan.json'
+        plan = json.loads(plan_path.read_text())
+        plan['status'] = 'draft'
+        plan_path.write_text(json.dumps(plan))
+        result = self.cli('record', '--run', self.run_dir, '--stage', 'references', '--evidence', path, code=1)
+        self.assertIn('ready', ' '.join(result['errors']))
+
+    def test_reference_screenshot_cannot_be_used_as_project_media(self):
+        self.through('brief')
+        path = self.prepare('references')
+        plan_path = self.run_dir / 'design-plan.json'
+        plan = json.loads(plan_path.read_text())
+        plan['content']['media'][0]['path'] = plan['source']['captures']['desktop']
+        plan_path.write_text(json.dumps(plan))
+        result = self.cli('record', '--run', self.run_dir, '--stage', 'references', '--evidence', path, code=1)
+        self.assertIn('screenshots belong in QA', ' '.join(result['errors']))
+
+    def test_visual_comparison_requires_a_native_receipt(self):
+        self.through('first-screen')
+        path = self.prepare('visual')
+        state_path = self.run_dir / 'workflow.json'
+        state = json.loads(state_path.read_text())
+        comparison = json.loads(path.read_text())['artifacts']['comparison']
+        del state['active']['receipts'][comparison]
+        state_path.write_text(json.dumps(state))
+        result = self.cli('record', '--run', self.run_dir, '--stage', 'visual', '--evidence', path, code=1)
+        self.assertIn('fresh comparison', ' '.join(result['errors']))
+
+    def test_visual_observations_must_cover_both_profiles(self):
+        self.through('first-screen')
+        path = self.prepare('visual')
+        review_path = self.run_dir / 'visual-observations.json'
+        review = json.loads(review_path.read_text())
+        review['items'].pop()
+        review_path.write_text(json.dumps(review))
+        result = self.cli('record', '--run', self.run_dir, '--stage', 'visual', '--evidence', path, code=1)
+        self.assertIn('both profiles', ' '.join(result['errors']))
+
+    def test_unresolved_visual_findings_cannot_be_dropped_on_retry(self):
+        self.through('first-screen')
+        path = self.prepare('visual')
+        review_path = self.run_dir / 'visual-observations.json'
+        review = json.loads(review_path.read_text())
+        review['findings'] = [{'id': 'mobile-heading', 'status': 'unresolved', 'problem': 'Broken heading'}]
+        review_path.write_text(json.dumps(review))
+        result = self.cli('record', '--run', self.run_dir, '--stage', 'visual', '--evidence', path, code=1)
+        self.assertIn('Unresolved visual finding', ' '.join(result['errors']))
+        path = self.prepare('visual')
+        result = self.cli('record', '--run', self.run_dir, '--stage', 'visual', '--evidence', path, code=1)
+        self.assertIn('previously recorded findings', ' '.join(result['errors']))
+
+    def test_comparison_board_change_blocks_recording(self):
+        self.through('first-screen')
+        path = self.prepare('visual')
+        board = self.run_dir / 'comparison.html'
+        board.write_text(board.read_text() + '<p>Changed evidence</p>')
+        result = self.cli('record', '--run', self.run_dir, '--stage', 'visual', '--evidence', path, code=1)
+        self.assertIn('board changed', ' '.join(result['errors']))
+
     @unittest.skipUnless(os.environ.get('PLAYWRIGHT_MODULE'), 'Requires an existing Playwright and Chromium')
     def test_real_capture_serves_the_current_site_and_copied_reports_cannot_be_reused(self):
         self.through('references')
@@ -362,6 +461,11 @@ class WorkflowTests(unittest.TestCase):
                         key = profile + ('_full' if stage == 'site' else '')
                         shot = profiles[profile]['screenshot_full' if stage == 'site' else 'screenshot']
                         report['artifacts'][key] = str(native.parent / shot)
+                if stage == 'visual':
+                    comparison = capture('comparison', '--browser-report', native)
+                    report['artifacts']['browser_report'] = str(native)
+                    report['artifacts']['comparison'] = str(comparison)
+                    report['artifacts']['visual_review'] = str(self.visual_observations(comparison))
             if stage == 'performance':
                 for profile in ('desktop', 'mobile'):
                     report['artifacts'][profile + '_report'] = str(capture(profile))
@@ -371,8 +475,15 @@ class WorkflowTests(unittest.TestCase):
                 report['artifacts']['preview_audit'] = str(capture('preview-audit', '--preview-root', self.root / 'extracted', '--package', package))
                 report['artifacts']['package_preview'] = str(capture('preview', '--preview-root', self.root / 'extracted',
                                                                   '--primary', '#primary', '--primary-target', '#flowers'))
-            path.write_text(json.dumps(report))
-            self.cli('record', '--run', self.run_dir, '--stage', stage, '--evidence', path)
+            if stage == 'visual':
+                observations = Path(report['artifacts']['visual_review'])
+            else:
+                observations = self.write(stage + '-observations.json', {'reviewer': report['reviewer'], 'checks': report['checks']})
+            manual = {'site': ['interaction_log'], 'delivery': ['package', 'handoff']}.get(stage, [])
+            bindings = [value for name in manual for value in ('--artifact', name + '=' + report['artifacts'][name])]
+            prepared = self.cli('prepare', '--run', self.run_dir, '--observations', observations, *bindings)
+            self.assertEqual(prepared['prepared']['missing_artifacts'], [])
+            self.cli('record', '--run', self.run_dir, '--stage', stage, '--evidence', prepared['prepared']['evidence'])
         self.assertTrue(self.cli('status', '--run', self.run_dir, '--require-complete')['complete'])
 
 

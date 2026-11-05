@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Prepare a Sitecraft design brief from the bundled landing-pattern catalog."""
+"""Prepare optional information architecture notes; visual case selection is in design_assets.py."""
 
 import argparse
 import json
@@ -27,6 +27,9 @@ def make_brief(intent, brief):
         *("> " + line for line in brief.splitlines()),
         "",
         "## 版式候选",
+        "",
+        "先用 design_assets.py 选择并观察真实案例，形成 design-plan.json。以下候选只辅助安排信息，"
+        "不能替代主视觉选型、中文排字、素材选择或参考到成品的对照。",
         "",
         "选择一项作为构图起点，再按真实业务内容调整栏目和主要入口。"
         "只有取舍会明显影响结果时，才渲染两个首屏。品牌规范和用户明确要求优先。",

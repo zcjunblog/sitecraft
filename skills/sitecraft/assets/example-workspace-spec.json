@@ -1,0 +1,25 @@
+{
+  "case": "work-surface",
+  "request": "做一个团队协作软件品牌官网",
+  "brand": "同频",
+  "headline": "让进展，彼此看见。",
+  "body": "把团队的决定、任务与交接放在同一处，打开就能接着做。",
+  "action": "体验工作台",
+  "primary_target": "#workbench",
+  "fit": "用途标题和可操作的真实 DOM 工作台共同说明产品，不用装饰图表代替能力。",
+  "visual_mode": "product-dom",
+  "visual_note": "使用本地可切换的任务与文档内容作为主体；全部为明确标注的演示数据。",
+  "media": [],
+  "workspace": {"title": "产品发布 · 工作空间", "items": [
+    {"kind": "文档", "name": "一起确认页面文案", "body": "这一页服务谁？让团队把意见落在实际内容上，保留下一步要做的事。"},
+    {"kind": "任务", "name": "检查手机上的主要入口", "body": "先确认按钮可见、内容可读，再检查展开与退出。这里是可以切换的本地演示。"},
+    {"kind": "交接", "name": "把本轮决定交给下一位", "body": "当前结论、仍待确认的问题与所需材料放在一起。演示不连接真实账号。"}
+  ]},
+  "site": {"sections": [
+    {"type": "services", "id": "workflow", "title": "让下一步清楚一些", "items": [
+      {"name": "把讨论落在内容上", "description": "围绕当前文档、任务与交接内容做决定，减少重新说明。"},
+      {"name": "保留当前上下文", "description": "说明已有结论与未决问题，而不是只留一个状态标签。"}
+    ]},
+    {"type": "contact", "id": "contact", "title": "聊聊团队怎么协作。", "body": "这是产品官网与联系流程的本地演示，未接入真实服务。", "demo": true}
+  ], "footer_note": "Sitecraft 软件产品示例 · 界面与数据为本地演示。"}
+}

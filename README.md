@@ -39,6 +39,18 @@
 
 做新官网时，Sitecraft 会从真实案例中确定主体、光线、字体和构图的搭配，再做可操作的桌面与手机首屏。先检查主按钮的位置与实际目标、图片和字体加载，再看画面并修订。比较两稿时固定品牌、文案和主图，核对构图与排字的变化。[查看设计流程](skills/sitecraft/references/delivery-workflow.md)
 
+### 参考如何变成页面
+
+当前开发改动把参考整理为可执行设计资产：**实际截图 → 设计关系与适用条件 → 项目的中文、主图和两端目标 → 可改写的 HTML/CSS → 参考与实际首屏对照 → 问题修复与复看**。
+
+内置五种起点：单一实物、沉浸场景、产品工作画面、内容目录、商品与中文标题。每例附来源与观察范围、可借鉴和不借用的部分、两端实现参数和原创代码。AI 按任务、品牌与素材选择；已有品牌优先，无匹配时另找实际作品，不要求所有官网采用同一构图。
+
+视觉检查将参考和当前桌面/手机截图并排呈现，对照构图、中文排字、主体裁切、光线材质、主要行动和手机重排。每项记录具体观察与取舍；已发现的问题需要保留修复前后图和复看。工具负责核对证据，视觉判断仍须实际看图。
+
+0.4.0 已在本机 WorkBuddy 完成同模型、固定内容的花店对照：首稿的主体尺度、手机花束可见范围和装饰克制有局部改善，后续视觉检查还自行发现并修复了裁切问题。**没有证明更省时，也不能保证每次都得到漂亮的首稿**；模型仍会花较多时间查文档，组装器的生成收益尚未单独证实。[查看真实截图、过程与限制](docs/validation/0.4.0.md) · [资产与使用方式](skills/sitecraft/references/executable-design-assets.md) · [案例数据](skills/sitecraft/references/design-assets.json) · [原创布局代码](skills/sitecraft/assets/hero.css)
+
+整站资产提供导航、手机菜单、商品/作品目录、服务清单、联系入口与完整组合示例，可按实际内容取用。检查工具可定位并复用已有环境，从本轮报告自动归集截图与阶段字段；视觉观察仍由实际评审填写。[查看完整组件示例](skills/sitecraft/assets/example.html) · [组装与自动化](skills/sitecraft/references/assembly-and-automation.md)
+
 ## 一句话之后，怎样推进到交付
 
 AI 按七个阶段完成制作，每阶段留下实际产物和检查结果。阶段工具核对前置条件、文件与版本，失败或未验证时保留问题并修复复验。你仍用日常语言描述需求，流程记录和工具调用由 AI 完成。
@@ -46,9 +58,9 @@ AI 按七个阶段完成制作，每阶段留下实际产物和检查结果。�
 | 阶段 | 可以查看的产物与结果 |
 | --- | --- |
 | 需求计划 | 原始需求、受众、主要动作、内容、效果范围与性能预算 |
-| 参考选型 | 实际参考图、来源、观察结果与借鉴关系 |
+| 参考选型 | 实际参考图、来源、项目设计计划、两端目标与实现位置 |
 | 首屏实现 | 可操作入口、桌面和手机首屏、浏览器检查报告 |
-| 视觉评审 | 两端实际截图、气质与构图判断、修订和复看结果 |
+| 视觉评审 | 参考与成品并排对照、两端逐项观察、问题修复前后图和复看结果 |
 | 整站与交互 | 整页截图、控件操作记录、Motion / 转场 / 光影中间帧、减少动态效果与适用的 3D 检查 |
 | 首页速度 | 桌面与手机各三次冷访问、一次热访问，以及逐样本预算检查 |
 | 最终交付 | 部署包、文件与图片审计、独立解压预览、使用说明和当前版本验收状态 |
@@ -70,7 +82,7 @@ flowchart TD
     L --> C
 ```
 
-代码、图片或证据改变后，相关阶段及后续结果需要重验，失败尝试保留在记录中。最终包必须与已审计目录同版，并从独立解压目录复验。视觉与动态评审需要 AI 实际观察，流程工具负责核对文件、顺序和声明的检查结果。当前机制仍需生成任务验证其对最终审美的提升。[查看执行约束与命令](skills/sitecraft/references/workflow-contract.md)
+代码、图片或证据改变后，相关阶段及后续结果需要重验，失败尝试保留在记录中。最终包必须与已审计目录同版，并从独立解压目录复验。视觉与动态评审需要 AI 实际观察，流程工具负责核对文件、顺序和声明的检查结果。本轮验证的作用与尚未覆盖的范围见[验证记录](docs/validation/0.4.0.md)，技术通过不等于审美保证。[查看执行约束与命令](skills/sitecraft/references/workflow-contract.md)
 
 ## 产出示例
 
@@ -246,7 +258,7 @@ python3 -m http.server 8080 --directory examples/pawly/site
 
 ```text
 sitecraft/
-├── skills/sitecraft/       技能入口、参考图、检查器与维护用例
+├── skills/sitecraft/       技能入口、参考图、设计资产、检查器与维护用例
 ├── examples/              四个示例的 source、site 和构建说明
 ├── docs/images/           README 实际网页截图
 ├── tools/                 安装、打包与仓库检查
@@ -265,7 +277,7 @@ python3 -B -m unittest discover -s skills/sitecraft/tests -p 'test_*.py'
 
 ```sh
 PLAYWRIGHT_MODULE=/path/to/node_modules/playwright \
-  node --test skills/sitecraft/tests/review_site.test.mjs skills/sitecraft/tests/measure_page.test.mjs
+  node --test skills/sitecraft/tests/review_site.test.mjs skills/sitecraft/tests/measure_page.test.mjs skills/sitecraft/tests/components.test.mjs
 ```
 
 首屏用例覆盖手机入口位置、目标缺失或无法到达、遮挡、演示弹层、图片与字体解码失败，以及旧的整页检查入口。用例通过证明检查器能识别这些问题，视觉质量仍需查看实际画面。

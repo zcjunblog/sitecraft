@@ -14,15 +14,20 @@ from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from threading import Thread
 from uuid import uuid4
+from html.parser import HTMLParser
 
 from audit_static import image_header
+from design_assets import check_plan
+from design_review import build_comparison, validate_comparison, validate_review
+from environment import discover
+from evidence import prepare
 
 
 STAGES = {
     'brief': (['brief'], ['requirements']),
-    'references': (['reference_notes', 'reference_capture'], ['source_observed', 'design_mapping']),
+    'references': (['reference_notes', 'reference_capture', 'design_plan'], ['source_observed', 'design_mapping']),
     'first-screen': (['entry', 'browser_report'], ['background_and_fonts']),
-    'visual': (['desktop', 'mobile'], ['brand_fit', 'hierarchy', 'mobile_crop']),
+    'visual': (['desktop', 'mobile', 'comparison', 'visual_review'], ['brand_fit', 'hierarchy', 'mobile_crop', 'reference_transfer']),
     'site': (['entry', 'desktop_full', 'mobile_full', 'interaction_log', 'browser_report'],
              ['content', 'mobile_layout', 'controls', 'motion', 'transition', 'lighting', 'reduced_motion', 'webgl']),
     'performance': (['mobile_report', 'desktop_report'], ['page_identity']),
@@ -31,6 +36,13 @@ STAGES = {
 }
 NAMES = list(STAGES)
 FEATURES = ('motion', 'transition', 'lighting', 'webgl')
+
+
+def brief_template(request):
+    return {'request': request, 'audience': '', 'primary_action': '', 'title': '', 'content': [], 'constraints': [],
+            'features': {name: {'enabled': None if name == 'webgl' else True, 'reason': '', 'source_quote': ''}
+                         for name in FEATURES},
+            'budgets': {'lcp_ms': 2500, 'cls': 0.1, 'transfer_bytes': 1600000}}
 
 
 def require(condition, message):
@@ -104,6 +116,9 @@ def refresh(state):
         stage = state['stages'][name]
         if stage['status'] != 'pass':
             continue
+        if name == 'references' and not stage.get('design_plan_path'):
+            invalidate(state, name, 'Reference assets contract changed; prepare a design plan and recheck references')
+            break
         try:
             require(not stage.get('site_sha256') or stage['site_sha256'] == current, 'Site content changed')
             for path, expected in stage['artifacts'].items():
@@ -155,10 +170,37 @@ class PreviewHandler(SimpleHTTPRequestHandler):
             super().do_GET()
 
 
+def primary_bindings(state, args):
+    controls = state.get('controls', {})
+    args.primary = args.primary or controls.get('primary')
+    args.primary_target = args.primary_target or controls.get('primary_target')
+    if args.primary:
+        return
+
+    class Marker(HTMLParser):
+        def __init__(self):
+            super().__init__()
+            self.targets = []
+
+        def handle_starttag(self, tag, attributes):
+            attributes = dict(attributes)
+            if 'data-sitecraft-primary' in attributes:
+                self.targets.append(attributes.get('href'))
+
+    parser = Marker()
+    entry = Path(state['site']) / 'index.html'
+    require(entry.is_file(), 'Write the actual entry before browser discovery or checks')
+    parser.feed(entry.read_text(encoding='utf-8'))
+    require(len(parser.targets) == 1 and parser.targets[0] and parser.targets[0].startswith('#') and len(parser.targets[0]) > 1,
+            'Provide the actual --primary and --primary-target, or mark one real local action data-sitecraft-primary')
+    args.primary = '[data-sitecraft-primary]'
+    args.primary_target = parser.targets[0]
+
+
 def run_check(state, run, args):
     active = state.get('active')
     require(active, 'Start a stage before running checks')
-    allowed = {'first-screen': ['browser'], 'visual': ['browser'], 'site': ['browser'],
+    allowed = {'first-screen': ['browser'], 'visual': ['browser', 'comparison'], 'site': ['browser'],
                'performance': ['mobile', 'desktop'], 'delivery': ['audit', 'preview-audit', 'preview']}
     require(args.tool in allowed.get(active['stage'], []), 'This tool does not belong to the active stage')
     site = Path(state['site'])
@@ -168,6 +210,20 @@ def run_check(state, run, args):
     require(active['site_sha256'] == site_digest(site), 'Site changed; restart the affected stage')
     directory = run / 'checks' / uuid4().hex
     directory.mkdir(parents=True)
+    if args.tool == 'comparison':
+        require(args.browser_report, 'Provide the current visual-stage --browser-report')
+        browser_report = Path(args.browser_report).resolve()
+        receipt(browser_report, active, 'browser', site)
+        plan_path = Path(state['stages']['references']['design_plan_path'])
+        plan = read_json(Path(state['stages']['brief']['brief_path']))
+        check_browser(browser_report, active, {}, plan['title'])
+        output = directory / 'comparison.json'
+        build_comparison(plan_path, browser_report, output)
+        files = {str(path.resolve()): digest(path) for path in directory.iterdir() if path.is_file()}
+        active.setdefault('receipts', {})[str(output)] = {'tool': 'comparison', 'root': str(site),
+                                                         'exit_code': 0, 'files': files}
+        return {'report': str(output), 'tool_exit_code': 0, 'status': 'prepared',
+                'board': str(output.with_suffix('.html'))}
     output = directory / ('review.json' if args.tool in ('browser', 'preview') else 'report.json')
     script_dir = Path(__file__).resolve().parent
     if args.tool in ('audit', 'preview-audit'):
@@ -184,14 +240,20 @@ def run_check(state, run, args):
             command += ['--archive-prefix', args.archive_prefix]
         process = subprocess.run(command, capture_output=True, text=True, timeout=180)
     else:
+        environment = state.get('environment', {})
+        if args.playwright_module or args.channel or environment.get('status') != 'available':
+            environment = discover(site, args.playwright_module, args.channel)
+            state['environment'] = environment
+        require(environment.get('status') == 'available', '\n'.join(environment.get('issues', ['Browser availability unverified'])))
         server = ThreadingHTTPServer(('127.0.0.1', 0), partial(PreviewHandler, directory=str(root)))
         worker = Thread(target=server.serve_forever, daemon=True)
         worker.start()
         try:
             url = f'http://127.0.0.1:{server.server_port}/'
             if args.tool in ('browser', 'preview'):
+                primary_bindings(state, args)
                 require(args.primary, 'Provide the actual --primary selector')
-                command = ['node', str(script_dir / 'review_site.mjs'), '--url', url, '--out', str(directory), '--primary', args.primary]
+                command = [environment['node'], str(script_dir / 'review_site.mjs'), '--url', url, '--out', str(directory), '--primary', args.primary]
                 if active['stage'] != 'site':
                     command += ['--draft']
                 else:
@@ -203,12 +265,11 @@ def run_check(state, run, args):
                 require(active['stage'] != 'site' or args.primary_target, 'Full site checks require --primary-target')
             else:
                 plan = read_json(Path(state['stages']['brief']['brief_path']))
-                command = ['node', str(script_dir / 'measure_page.mjs'), '--url', url, '--report', str(output),
+                command = [environment['node'], str(script_dir / 'measure_page.mjs'), '--url', url, '--report', str(output),
                            '--profile', args.tool, '--runs', '3', '--warm', '--expect-title', plan['title']]
-            if args.playwright_module:
-                command += ['--playwright-module', args.playwright_module]
-            if args.channel:
-                command += ['--channel', args.channel]
+            command += ['--playwright-module', environment['playwright_module']]
+            if environment.get('channel'):
+                command += ['--channel', environment['channel']]
             process = subprocess.run(command, capture_output=True, text=True, timeout=240)
         finally:
             server.shutdown()
@@ -368,6 +429,11 @@ def validate(state, stage, evidence_path, tracked):
         for name in ('source', 'observed', 'mapping'):
             require(notes.get(name, '').strip(), f'Reference requires {name}')
         require(image_header(paths['reference_capture'].read_bytes())[0] is not None, 'Reference capture must be an actual image')
+        design_plan = check_plan(paths['design_plan'], lambda path: tracked.update({str(path): digest(path)}))
+        require(design_plan['request'] == state['request'], 'Keep the original request in the design plan')
+        captures = [(paths['design_plan'].parent / name).resolve() for name in design_plan['source']['captures'].values()]
+        require(digest(paths['reference_capture']) in {digest(path) for path in captures},
+                'Reference capture must match a source image declared in the design plan')
     if stage in ('first-screen', 'site'):
         require(paths['entry'].is_relative_to(Path(state['site'])), 'Entry must belong to the release tree')
         receipt(paths['browser_report'], active, 'browser', Path(state['site']))
@@ -379,6 +445,20 @@ def validate(state, stage, evidence_path, tracked):
             require(size[0] == width and size[1] >= (900 if width == 1440 else 844), f'Invalid {key} screenshot')
             fresh(paths[key], active)
             captured_file(paths[key], active, Path(state['site']))
+    if stage == 'visual':
+        require({'comparison', 'visual_review'}.issubset(report['checks']['reference_transfer']['evidence']),
+                'Reference transfer must link the comparison and the visual observations')
+        receipt(paths['comparison'], active, 'comparison', Path(state['site']))
+        track = lambda path: tracked.update({str(path): digest(path)})
+        comparison = validate_comparison(paths['comparison'], state['stages']['references']['design_plan_path'], paths, track)
+        receipt(Path(comparison['browser_report']), active, 'browser', Path(state['site']))
+        previous_findings = set()
+        for attempt in state['attempts']:
+            if attempt['stage'] == 'visual':
+                for finding in attempt.get('recorded_results', {}).get('visual_review', {}).get('findings', []):
+                    if isinstance(finding, dict) and finding.get('id'):
+                        previous_findings.add(finding['id'])
+        validate_review(paths['visual_review'], paths['comparison'], paths, track, previous_findings)
     if stage == 'site' and any(plan['features'][name]['enabled'] for name in ('motion', 'transition', 'lighting')):
         require('motion_capture' in paths, 'Observe motion, transition and lighting with timed frame evidence')
         captured_file(paths['motion_capture'], active, Path(state['site']))
@@ -416,16 +496,22 @@ def result(state):
     summaries = {name: {key: value for key, value in stage.items()
                         if key in ('status', 'errors', 'reason', 'checked_ns')}
                  for name, stage in state['stages'].items()}
-    return {'complete': next_stage is None, 'next_stage': next_stage, 'stages': summaries,
-            'active': state.get('active'), 'attempts': len(state['attempts'])}
+    output = {'complete': next_stage is None, 'next_stage': next_stage, 'stages': summaries,
+              'active': state.get('active'), 'attempts': len(state['attempts'])}
+    if state.get('brief_template'):
+        output['brief_template'] = state['brief_template']
+    return output
 
 
 def execute(args):
     if args.command == 'template':
         artifacts, checks = STAGES[args.stage]
-        return {'stage': args.stage, 'status': 'unverified', 'reviewer': '',
-                'artifacts': dict.fromkeys(artifacts, ''),
-                'checks': {name: {'status': 'unverified', 'detail': '', 'evidence': []} for name in checks}}
+        output = {'stage': args.stage, 'status': 'unverified', 'reviewer': '',
+                  'artifacts': dict.fromkeys(artifacts, ''),
+                  'checks': {name: {'status': 'unverified', 'detail': '', 'evidence': []} for name in checks}}
+        if args.stage == 'brief':
+            output['artifact_template'] = brief_template('')
+        return output
     run = Path(args.out if args.command == 'init' else args.run).resolve()
     with locked(run):
         if args.command == 'init':
@@ -435,6 +521,9 @@ def execute(args):
             site.mkdir(parents=True, exist_ok=True)
             state = {'schema_version': 1, 'request': args.request, 'site': str(site), 'delivery': args.delivery,
                      'stages': {name: {'status': 'pending'} for name in NAMES}, 'attempts': [], 'active': None}
+            draft = run / 'brief-draft.json'
+            draft.write_text(json.dumps(brief_template(args.request), ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+            state['brief_template'] = str(draft)
         else:
             state = read_json(run / 'workflow.json')
             require(state.get('schema_version') == 1, 'Unsupported workflow schema')
@@ -479,17 +568,31 @@ def execute(args):
                 if args.stage == 'brief' and not errors:
                     report = read_json(Path(args.evidence).resolve())
                     attempt['brief_path'] = str((Path(args.evidence).resolve().parent / report['artifacts']['brief']).resolve())
+                if args.stage == 'references' and not errors:
+                    report = read_json(Path(args.evidence).resolve())
+                    attempt['design_plan_path'] = str((Path(args.evidence).resolve().parent / report['artifacts']['design_plan']).resolve())
                 state['attempts'].append(attempt)
                 state['stages'][args.stage] = dict(attempt)
                 state['active'] = None
             if args.command == 'check':
                 checked = run_check(state, run, args)
+            if args.command == 'doctor':
+                require((Path(state['site']) / 'index.html').is_file(), 'Write a runnable first screen before environment discovery')
+                state['environment'] = discover(Path(state['site']), args.playwright_module, args.channel)
+                if args.primary:
+                    state['controls'] = {'primary': args.primary, 'primary_target': args.primary_target}
+            if args.command == 'prepare':
+                prepared = prepare(state, run, STAGES, Path(args.observations).resolve(), args.artifact)
         save(run, state)
         output = result(state)
         if args.command == 'record':
             output['errors'] = state['stages'][args.stage]['errors']
         if args.command == 'check':
             output['check'] = checked
+        if args.command == 'doctor':
+            output['environment'] = state['environment']
+        if args.command == 'prepare':
+            output['prepared'] = prepared
         return output
 
 
@@ -505,9 +608,17 @@ def main():
     template.add_argument('--stage', choices=NAMES, required=True)
     check = commands.add_parser('check')
     check.add_argument('--run', required=True)
-    check.add_argument('--tool', choices=['browser', 'mobile', 'desktop', 'audit', 'preview-audit', 'preview'], required=True)
-    for name in ('preview-root', 'package', 'image-log', 'archive-prefix', 'primary', 'primary-target', 'motion-plan', 'playwright-module', 'channel'):
+    check.add_argument('--tool', choices=['browser', 'comparison', 'mobile', 'desktop', 'audit', 'preview-audit', 'preview'], required=True)
+    for name in ('preview-root', 'package', 'image-log', 'archive-prefix', 'primary', 'primary-target', 'motion-plan', 'playwright-module', 'channel', 'browser-report'):
         check.add_argument('--' + name)
+    doctor = commands.add_parser('doctor')
+    doctor.add_argument('--run', required=True)
+    for name in ('playwright-module', 'channel', 'primary', 'primary-target'):
+        doctor.add_argument('--' + name)
+    prepared = commands.add_parser('prepare')
+    prepared.add_argument('--run', required=True)
+    prepared.add_argument('--observations', required=True)
+    prepared.add_argument('--artifact', action='append', default=[])
     for name in ('start', 'record', 'status'):
         command = commands.add_parser(name)
         command.add_argument('--run', required=True)
@@ -523,6 +634,8 @@ def main():
         failed = (args.command == 'record' and bool(output['errors'])) or (
             args.command == 'status' and args.require_complete and not output['complete']) or (
             args.command == 'check' and output['check']['tool_exit_code'] != 0)
+        if args.command == 'doctor' and output['environment']['status'] != 'available':
+            failed = True
     except (ValueError, OSError, KeyError, TypeError, subprocess.TimeoutExpired) as error:
         output, failed = {'status': 'fail', 'errors': [str(error)]}, True
     print(json.dumps(output, ensure_ascii=False, indent=2, allow_nan=False))
